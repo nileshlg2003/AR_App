@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="NY_SkyLine" size="924.000000 577.500000" />
+    <ImageTarget name="ConventionCenter" size="721.000000 478.000000" />
+    <ImageTarget name="NY" size="675.000000 819.000000" />
+    <ImageTarget name="NorthVegasStrip" size="465.000000 638.000000" />
+  </Tracking>
+</QCARConfig>
