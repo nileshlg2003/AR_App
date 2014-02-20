@@ -7,12 +7,11 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 
 		// Globals
 		private GameObject _imageTarget = null;
-		private GameObject _vegasContainerObject = null;
 		private GameObject _vegasObject = null;
 		private Plane _targetPlane;
 		private Vector3 _defaultVegasPosition;
 		private Quaternion _defaultVegasRotation;
-		private Vector3 _defaultVegasContainerScale;
+		private Vector3 _defaultVegasScale;
 		private TrackableBehaviour _mTrackableBehaviour;
 		private bool _isVegasAtOrigin = true;
 		private bool _isVegasAtDefaultScale = true;
@@ -35,7 +34,7 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 		// Use this for initialization
 		void Start ()
 		{			
-				_imageTarget = GameObject.Find ("Vegas_Strip_Target");
+				_imageTarget = GameObject.Find ("VegasStripTarget");
 				if (_imageTarget != null) {
 						_targetPlane = new Plane (_imageTarget.transform.up, _imageTarget.transform.position);
 						_mTrackableBehaviour = _imageTarget.GetComponent<TrackableBehaviour> ();
@@ -46,16 +45,11 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 						}
 				}
 
-				// Added a container because the vegas object's pivot point is in the corner, so was zooming weirdly
-				_vegasContainerObject = GameObject.Find ("VegasContainer");
-				if (_vegasContainerObject != null) {
-						_defaultVegasContainerScale = _vegasContainerObject.transform.localScale;
-				}
-
 				_vegasObject = GameObject.Find ("Vegas");
 				if (_vegasObject != null) {
 						_defaultVegasPosition = _vegasObject.transform.position;
 						_defaultVegasRotation = _vegasObject.transform.rotation;
+						_defaultVegasScale = _vegasObject.transform.localScale;
 				}
 				
 		}
@@ -64,7 +58,7 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 		void Update ()
 		{
 				// Check that the image target has been set, the model exists
-				if (_imageTarget != null && _vegasContainerObject != null) {
+				if (_imageTarget != null && _vegasObject != null) {
 						if (Input.touchCount == 1) {
 								// We are moving the object on the plane
 								DragObject (Input.GetTouch (0));
@@ -118,13 +112,13 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 //				}
 		
 				if (touchDelta < 0) {
-						float oldScale = _vegasContainerObject.transform.localScale.x;
+						float oldScale = _vegasObject.transform.localScale.x;
 						float newScale = oldScale / 1.1f;
-						_vegasContainerObject.transform.localScale = new Vector3 (newScale, newScale, newScale);
+						_vegasObject.transform.localScale = new Vector3 (newScale, newScale, newScale);
 				} else {
-						float oldScale = _vegasContainerObject.transform.localScale.x;
+						float oldScale = _vegasObject.transform.localScale.x;
 						float newScale = oldScale * 1.1f;
-						_vegasContainerObject.transform.localScale = new Vector3 (newScale, newScale, newScale);
+						_vegasObject.transform.localScale = new Vector3 (newScale, newScale, newScale);
 				}
 		}
 
@@ -182,8 +176,8 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 
 		private void OnTrackingLost ()
 		{
-				if (_vegasContainerObject != null && !_isVegasAtDefaultScale) {
-						_vegasContainerObject.transform.localScale = _defaultVegasContainerScale;
+				if (_vegasObject != null && !_isVegasAtDefaultScale) {
+						_vegasObject.transform.localScale = _defaultVegasScale;
 				}
 
 				// Reset to original position and rotation when tracking lost
