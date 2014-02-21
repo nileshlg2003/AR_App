@@ -7,38 +7,67 @@ public class ImageGridHandler : MonoBehaviour {
 	public Texture2D image1;
 	public Texture2D image2;
 	public Texture2D image3;
+	public Texture2D image4;
+	public Texture2D image5;
+	public Texture2D image6;
+	public Texture2D image7;
+	public Texture2D image8;
+	public Texture2D image9;
+	public Texture2D image10;
+	public PrevButtonHandler prevButton;
+	public NextButtonHandler nextButton;
 
 	private Texture2D[] imagesArray;
+	private int currentImageIndex = -1;
+	private GameObject imagePanel;
 
 	private void Start () {
-		imagesArray = new Texture2D[3];
+		this.imagesArray = new Texture2D[10];
+		this.imagePanel = GameObject.Find("ImageViewer");
 	}
 
-	private void OnGUI(){
+	public void NextImage() {
+		this.nextButton.playAnimation = true; // Automatically stops after first loop
+
+		if (this.currentImageIndex < this.imagesArray.Length) {
+			this.currentImageIndex++;
+		} else {
+			this.currentImageIndex = 0;
+		}
+
+		this.imagePanel.transform.renderer.material.mainTexture = this.imagesArray[this.currentImageIndex] as Texture2D;
+	}
+
+	public void PrevImage() {
+		this.prevButton.playAnimation = true; // Automatically stops after first loop
+
+		if (this.currentImageIndex > 0) {
+			this.currentImageIndex--;
+		} else {
+			this.currentImageIndex = this.imagesArray.Length - 1;
+		}
+		
+		this.imagePanel.transform.renderer.material.mainTexture = this.imagesArray[this.currentImageIndex] as Texture2D;
 	}
 
 	public void ShowImages() {
-		if (imagesArray != null && imagesArray.Length > 0){
-
-			GameObject imagePanel = GameObject.Find("ImageViewer");
-
-			imagePanel.transform.renderer.material.mainTexture = imagesArray[0] as Texture2D;
-
-//			for (int i = 0; i < imagesArray.Length; i++){
-//					GUI.DrawTexture(new Rect(0,0,Screen.width, Screen.height), imagesArray[0], ScaleMode.ScaleToFit, true);
-//			}
+		if (this.imagesArray != null && this.imagesArray.Length > 0){
+		
+			this.currentImageIndex = 0;
+			this.imagePanel.transform.renderer.material.mainTexture = this.imagesArray[this.currentImageIndex] as Texture2D;
 		}
 	}
 
 	public void LoadImages() {
-//		Object[] textures = Resources.LoadAll(_imagePath, typeof(Texture2D));
-//		imagesArray = new Texture2D[textures.Length];
-//		
-//		for (int i = 0; i < textures.Length; i++){
-//			imagesArray[i] = (Texture2D)textures[i];
-//		}
 		imagesArray[0] = image1;
 		imagesArray[1] = image2;
 		imagesArray[2] = image3;
+		imagesArray[3] = image4;
+		imagesArray[4] = image5;
+		imagesArray[5] = image6;
+		imagesArray[6] = image7;
+		imagesArray[7] = image8;
+		imagesArray[8] = image9;
+		imagesArray[9] = image10;
 	}
 }

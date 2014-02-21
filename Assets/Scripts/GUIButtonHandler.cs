@@ -11,7 +11,7 @@ public class GUIButtonHandler : MonoBehaviour {
 	}
 	
 	void Update () {
-		foreach (iPhoneTouch touch in iPhoneInput.touches) {
+		foreach (Touch touch in Input.touches) {
 			if(Input.touchCount == 1) {
 				if(Input.GetTouch(0).phase == TouchPhase.Ended) {
 					
@@ -36,6 +36,12 @@ public class GUIButtonHandler : MonoBehaviour {
 								goToWebGUIButton.selectGUIButtons();
 								historyGUIButton.DeselectGUIButtons();
 								galleryGUIButton.DeselectGUIButtons();
+							break;
+							case "NextArrow":
+								galleryGUIButton.imageSlider.NextImage();
+							break;
+							case "PrevArrow":
+								galleryGUIButton.imageSlider.PrevImage();
 							break;
 						}
 					}

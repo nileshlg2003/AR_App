@@ -9,7 +9,7 @@ public class GalleryGUIButton : MonoBehaviour {
 	public ImageGridHandler imageSlider;
 
 	private GameObject imageGrid;
-	
+
 	private void Start () {		
 		this.gameObject.transform.renderer.material.mainTexture = buttonNormalTexture;
 
