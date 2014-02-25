@@ -21,6 +21,8 @@ public class VegasController : MonoBehaviour
 		private Vector3 mDefaultPosition;
 		private Quaternion mDefaultRotation;
 		private Vector3 mDefaultScale;
+
+		private int mFlyThroughTime = 10;
 	
 		// Dragging variables
 		private Vector3 mLastPlanePoint;
@@ -68,6 +70,7 @@ public class VegasController : MonoBehaviour
 
 				mVegas.SetActive (true);
 				iTween.MoveTo (mVegas, mFlyThroughTable);
+				yield return mFlyThroughTime;
 		}
 
 		public void Drag (Touch touch, Ray ray)
@@ -98,12 +101,13 @@ public class VegasController : MonoBehaviour
 				Vector2 curDist = touch1.position - touch2.position;
 				Vector2 prevDist = ((touch1.position - touch1.deltaPosition) - (touch2.position - touch2.deltaPosition));
 				float touchDelta = curDist.magnitude - prevDist.magnitude;
+				Debug.Log ("Logan - touchDelta " + touchDelta.ToString ());
 
 				if (touchDelta < 0) {
 						float oldScale = mVegas.transform.localScale.x;
 						float newScale = oldScale / 1.1f;
 						mVegas.transform.localScale = new Vector3 (newScale, newScale, newScale);
-				} else {
+				} else if (touchDelta > 0) {
 						float oldScale = mVegas.transform.localScale.x;
 						float newScale = oldScale * 1.1f;
 						mVegas.transform.localScale = new Vector3 (newScale, newScale, newScale);
@@ -131,7 +135,7 @@ public class VegasController : MonoBehaviour
 				//startPoint.y += (mVegas.renderer.bounds.size.y / 2) / mVegas.transform.localScale.y;
 				startPoint.y += mVegas.renderer.bounds.size.y / 2;
 				mFlyThroughTable.Add ("position", startPoint);
-				mFlyThroughTable.Add ("time", 10);
+				mFlyThroughTable.Add ("time", mFlyThroughTime);
 				mFlyThroughTable.Add ("easetype", iTween.EaseType.easeOutCirc);
 				mFlyThroughTable.Add ("oncomplete", "FlyThroughComplete");
 		}

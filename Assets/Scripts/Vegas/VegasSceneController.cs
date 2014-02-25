@@ -18,7 +18,7 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 
 		private bool mFlyThroughRunning = false;
 		private bool mObjectTouched = false;
-		private bool mFirstComplete = false;
+		private static bool mFirstComplete = false;
 	
 	#endregion
 
@@ -64,47 +64,32 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 								}
 						}
 				} else if (Input.touchCount == 2) {
+						// Get both touches
 						Touch touch1 = Input.GetTouch (0);
 						Touch touch2 = Input.GetTouch (1);
 
-						Ray ray = Camera.main.ScreenPointToRay (touch1.position);				
+						// Check if ray1 hit and get its object
+						Ray ray1 = Camera.main.ScreenPointToRay (touch1.position);
 						RaycastHit hit1;
-
-						// Something weird happening here where it is calling on both for a short while.
-						// Need MOAR DEBUG
-						if (mObjectTouched = Physics.Raycast (ray, out hit1)) {
-								mFirstComplete = true;
-								string gameObjectName = hit1.collider.gameObject.name;
-				
-								switch (gameObjectName) {
-								case "Vegas":
-										if (!mFlyThroughRunning) {
-												mVegasController.Zoom (touch1, touch2);
-										}
-										break;
-								}
-						} else {
-								mFirstComplete = true;
+						bool ray1hit = false;
+						string gameObjectName1 = null;
+						if (ray1hit = Physics.Raycast (ray1, out hit1)) {
+								gameObjectName1 = hit1.collider.gameObject.name;
 						}
 
-						if (!mObjectTouched && mFirstComplete) {
-								mFirstComplete = false;
-								ray = Camera.main.ScreenPointToRay (touch2.position);				
-								RaycastHit hit2;
-							
-								if (Physics.Raycast (ray, out hit2)) {
-										string gameObjectName = hit2.collider.gameObject.name;
-								
-										switch (gameObjectName) {
-										case "Vegas":
-												if (!mFlyThroughRunning) {
-														mVegasController.Zoom (touch1, touch2);
-												}
-												break;
-										}
-								}
-						} else {
-								mFirstComplete = false;
+						// Check if ray2 hit and get its object
+						Ray ray2 = Camera.main.ScreenPointToRay (touch2.position);
+						RaycastHit hit2;
+						bool ray2hit = false;
+						string gameObjectName2 = null;
+						if (ray2hit = Physics.Raycast (ray2, out hit2)) {
+								gameObjectName2 = hit2.collider.gameObject.name;
+						}
+
+						// If either hit and their object was vegas, do the zoom.
+						if ((ray1hit && gameObjectName1 == "Vegas") ||
+								(ray2hit && gameObjectName2 == "Vegas")) {
+								mVegasController.Zoom (touch1, touch2);
 						}
 				}
 		}
