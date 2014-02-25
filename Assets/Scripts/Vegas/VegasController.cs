@@ -64,7 +64,7 @@ public class VegasController : MonoBehaviour
 	
 	#region Public Methods
 	
-		public void StartFlyThrough (CompleteListener listener)
+		public IEnumerable StartFlyThrough (CompleteListener listener)
 		{
 				mListener = listener;
 
