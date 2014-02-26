@@ -8,10 +8,9 @@ public class AirplaneHandler : MonoBehaviour {
 	void Update () {
 		if (this.playAnimation) {
 			iTween.MoveTo(this.gameObject, iTween.Hash(
-				"path", iTweenPath.GetPath("FlightPath"),
-				//"orienttopath", true,
-				"time", 10,
-				"lookTime", 0.2,
+				"path", iTweenPath.GetPath("FlightPath2"),
+				"orienttopath", true,
+				"time", 15,
 				"easetype", iTween.EaseType.linear,
       			"looptype", iTween.LoopType.loop));
 			playAnimation = false;
