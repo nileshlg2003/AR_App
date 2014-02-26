@@ -28,12 +28,6 @@ public class ExclamationMarkController : MonoBehaviour
 				InitialiseBounceTable ();
 		}
 	
-		// Update is called once per frame
-		// void Update ()
-		// {
-		
-		// }
-	
 	#endregion
 	
 	#region Public Methods
