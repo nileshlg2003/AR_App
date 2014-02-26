@@ -1,0 +1,42 @@
+Createch Interactive Panoramic Framework
+
+www.createchinteractive.com
+
+Version 1.0
+--------------
+Base Release
+
+
+Version 1.1
+--------------
+CHANGES
+
+- Camera's horizontal rotation no longer has to be at 0, camera will now assume the initial horizontal offset and work from that offset.
+
+- Updated the manual
+
+
+NEW FEATURES
+
+- Added a new GUI control scheme. It can now be assigned via the Panoramic Camera Creator screen, or alternatively, just drag the GuiControls script on to ready made Panoramic Camera setup. It must optionally be assigned the included GUI Controls skin.
+
+- Added feature to check if the users interaction was over a GUI element, and if so, to not activate an underlaying hotspot
+
+- Added new option to invert the mouse zoom, it can be accessed via the Panoramic Camera Creator screen, or alternatively, on the PanoControls script on a ready made Panoramic Camera setup
+
+
+Version 1.2
+--------------
+CHANGES
+
+- Added custom inspector to PanoControls (Cosmetic change)
+
+
+NEW FEATURES
+
+- Added new options to invert the mouse horizontal and vertical panning, they can be accessed via the Panoramic Camera Creator screen, or alternatively, on the PanoControls script on a ready made Panoramic Camera setup
+
+- Added new option to invert the touch horizontal and vertical panning, they can be accessed via the Panoramic Camera Creator screen, or alternatively, on the PanoControls script on a ready made Panoramic Camera setup
+
+- Added new option to invert the mouse horizontal and vertical panning, they can be accessed via the Panoramic Camera Creator screen, or alternatively, on the PanoControls script on a ready made Panoramic Camera setup
+
