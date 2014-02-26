@@ -9,16 +9,26 @@ using System.Collections;
 public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, VegasController.CompleteListener
 {
 	#region Fields
-	
-		public ExclamationMarkController mExclamationMarkController;
+
+		public VirtualTourButtonController mVirtualTourButtonController;
 		public VegasController mVegasController;
+		public MirageTextController mMirageTextController;
+		public MirageArrowController mMirageArrowController;
+		public LuxorTextController mLuxorTextController;
+		public LuxorArrowController mLuxorArrowController;
+		
+
+		//public ExclamationMarkController mExclamationMarkController;
+		//public MirageArrowBounce mMirageArrowBounce;
+		//public LuxorArrowBounce mLuxorArrowBounce;
+		//public VenetianArrowBounce mVenetianArrowBounce;
+		//public MirageHolderRotate mMirageHolderRotate;
+		//public TestText mTestText;
 
 		private GameObject mVegasImageTarget;
 		private TrackableBehaviour mTrackableBehaviour;
 
 		private bool mFlyThroughRunning = false;
-		private bool mObjectTouched = false;
-		private static bool mFirstComplete = false;
 	
 	#endregion
 
@@ -27,6 +37,7 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 		// Use this for initialization
 		void Start ()
 		{
+				Debug.Log ("Logan - Scene Controller - Start");
 				mVegasImageTarget = gameObject;
 
 				mTrackableBehaviour = mVegasImageTarget.GetComponent<TrackableBehaviour> ();
@@ -48,19 +59,25 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 								string gameObjectName = hit.collider.gameObject.name;
 			
 								switch (gameObjectName) {
-								case "ExclamationMark":
+								case "VirtualTourButton":
 										if (touch.phase == TouchPhase.Ended) {
-						
-												mExclamationMarkController.Hide ();
-												mVegasController.StartFlyThrough (this);
+												Debug.Log ("Logan - Scene Controller - Update and Touch VirtualTourButton");
+												mVirtualTourButtonController.Hide ();
 												mFlyThroughRunning = true;
+												mVegasController.StartFlyThrough (this);
 										}
 										break;
-								case "Vegas":
+								case "VegasModel":
 										if (!mFlyThroughRunning) {
+												Debug.Log ("Logan - Scene Controller - Update and Drag Vegas");
 												mVegasController.Drag (touch, ray);
 										}
 										break;
+//								case "TestHolder":
+//										if (!mFlyThroughRunning) {
+//												Application.OpenURL ("http://www.mirage.com/");
+//										}
+//										break;
 								}
 						}
 				} else if (Input.touchCount == 2) {
@@ -68,27 +85,24 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 						Touch touch1 = Input.GetTouch (0);
 						Touch touch2 = Input.GetTouch (1);
 
-						// Check if ray1 hit and get its object
-						Ray ray1 = Camera.main.ScreenPointToRay (touch1.position);
+						// Check if ray1 hit and get its object name
 						RaycastHit hit1;
-						bool ray1hit = false;
 						string gameObjectName1 = null;
-						if (ray1hit = Physics.Raycast (ray1, out hit1)) {
+						Ray ray1 = Camera.main.ScreenPointToRay (touch1.position);
+						if (Physics.Raycast (ray1, out hit1)) {
 								gameObjectName1 = hit1.collider.gameObject.name;
 						}
 
-						// Check if ray2 hit and get its object
-						Ray ray2 = Camera.main.ScreenPointToRay (touch2.position);
+						// Check if ray2 hit and get its object name
 						RaycastHit hit2;
-						bool ray2hit = false;
 						string gameObjectName2 = null;
-						if (ray2hit = Physics.Raycast (ray2, out hit2)) {
+						Ray ray2 = Camera.main.ScreenPointToRay (touch2.position);
+						if (Physics.Raycast (ray2, out hit2)) {
 								gameObjectName2 = hit2.collider.gameObject.name;
 						}
 
 						// If either hit and their object was vegas, do the zoom.
-						if ((ray1hit && gameObjectName1 == "Vegas") ||
-								(ray2hit && gameObjectName2 == "Vegas")) {
+						if (gameObjectName1 == "VegasModel" || gameObjectName2 == "VegasModel") {
 								mVegasController.Zoom (touch1, touch2);
 						}
 				}
@@ -108,6 +122,17 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 		public void OnFlyThroughComplete ()
 		{
 				mFlyThroughRunning = false;
+				mMirageTextController.Show ();
+				mMirageArrowController.Show ();
+				mLuxorTextController.Show ();
+				mLuxorArrowController.Show ();
+
+				//mVenetianArrowBounce.StartBounce ();
+				//Invoke ("mLuxorArrowBounce.StartBounce", 0.2f);
+				//Invoke ("mMirageArrowBounce.StartBounce", 0.5f);
+				
+				//mMirageHolderRotate.Show ();
+				//mTestText.Show ();
 		}
 	
 	#endregion
@@ -120,13 +145,31 @@ public class VegasSceneController : MonoBehaviour, ITrackableEventHandler, Vegas
 		
 		private void OnTrackingFound ()
 		{
-				mExclamationMarkController.StartBounce ();
+				Debug.Log ("Logan - Scene Controller - OnTrackingFound");
+				mVirtualTourButtonController.Show ();
+				//mExclamationMarkController.StartBounce ();
 		}
 	
 		private void OnTrackingLost ()
 		{
-				mExclamationMarkController.Reset ();
+				Debug.Log ("Logan - Scene Controller - OnTrackingLost");
+				mVirtualTourButtonController.Hide ();
+
+				// Reset vegas controller first otherwise the others reset weirdly
 				mVegasController.Reset ();
+
+				mMirageTextController.Reset ();
+				mMirageArrowController.Reset ();
+				mLuxorTextController.Reset ();
+				mLuxorArrowController.Reset ();
+
+
+				//mExclamationMarkController.Reset ();
+				//mMirageArrowBounce.Reset ();
+				//mVenetianArrowBounce.Reset ();
+				//mLuxorArrowBounce.Reset ();
+				//mTestText.Reset ();
+				//mMirageHolderRotate.Reset ();
 		}
 
 	#endregion

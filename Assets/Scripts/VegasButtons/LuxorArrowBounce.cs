@@ -26,8 +26,7 @@ public class LuxorArrowBounce : MonoBehaviour
 				mDefaultScale = mArrow.transform.localScale;
 
 				InitialiseBounceTable ();
-
-				Invoke ("StartBounce", 0.5f);
+				Reset ();
 		}
 	
 	#endregion
@@ -36,6 +35,7 @@ public class LuxorArrowBounce : MonoBehaviour
 	
 		public void StartBounce ()
 		{
+				mArrow.SetActive (true);
 				iTween.MoveTo (mArrow, mBounceTable);
 		}
 	
@@ -46,21 +46,19 @@ public class LuxorArrowBounce : MonoBehaviour
 	
 		public void Reset ()
 		{
-				mArrow.transform.position = mDefaultPosition;
-				mArrow.transform.rotation = mDefaultRotation;
-				mArrow.transform.localScale = mDefaultScale;
-				mArrow.SetActive (true);
+//				mArrow.transform.position = mDefaultPosition;
+//				mArrow.transform.rotation = mDefaultRotation;
+//				mArrow.transform.localScale = mDefaultScale;
+				mArrow.SetActive (false);
 				iTween.Stop (mArrow);
 		}
 	
 	#endregion
 	
 	#region Private Methods
-	
-		// IEnumerator
+
 		private void InitialiseBounceTable ()
 		{
-				//yield return new WaitForSeconds (0.7f);
 				Vector3 point = mDefaultPosition;
 				point.y += 75;
 				mBounceTable.Add ("position", point);

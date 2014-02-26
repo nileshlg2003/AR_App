@@ -9,22 +9,22 @@ public class TestText : MonoBehaviour
 		void Start ()
 		{
 				mTestText = gameObject;
+				Reset ();
 		}
 	
 		// Update is called once per frame
 		void Update ()
 		{
 				mTestText.transform.LookAt (Camera.main.transform);
+		}
 
-				if (Input.touchCount == 1) {
-						Ray ray = Camera.main.ScreenPointToRay (Input.GetTouch (0).position);				
-						RaycastHit hit;
-			
-						if (Physics.Raycast (ray, out hit)) {
-								if (hit.collider.gameObject.name == "TestHolder") {
-										Application.OpenURL ("http://www.mirage.com/");
-								}
-						}
-				}
+		public void Show ()
+		{
+				mTestText.SetActive (true);
+		}
+
+		public void Reset ()
+		{
+				mTestText.SetActive (false);
 		}
 }
