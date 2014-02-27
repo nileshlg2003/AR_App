@@ -26,8 +26,8 @@ public class MirageArrowBounce : MonoBehaviour
 				mDefaultScale = mArrow.transform.localScale;
 		
 				InitialiseBounceTable ();
-		
-				Invoke ("StartBounce", 0.2f);
+				Reset ();
+
 		}
 	
 	#endregion
@@ -36,6 +36,7 @@ public class MirageArrowBounce : MonoBehaviour
 	
 		public void StartBounce ()
 		{
+				mArrow.SetActive (true);
 				iTween.MoveTo (mArrow, mBounceTable);
 		}
 	
@@ -46,10 +47,10 @@ public class MirageArrowBounce : MonoBehaviour
 	
 		public void Reset ()
 		{
-				mArrow.transform.position = mDefaultPosition;
-				mArrow.transform.rotation = mDefaultRotation;
-				mArrow.transform.localScale = mDefaultScale;
-				mArrow.SetActive (true);
+//				mArrow.transform.position = mDefaultPosition;
+//				mArrow.transform.rotation = mDefaultRotation;
+//				mArrow.transform.localScale = mDefaultScale;
+				mArrow.SetActive (false);
 				iTween.Stop (mArrow);
 		}
 	

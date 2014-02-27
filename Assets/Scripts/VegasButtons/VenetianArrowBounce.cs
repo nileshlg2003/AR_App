@@ -26,8 +26,7 @@ public class VenetianArrowBounce : MonoBehaviour
 				mDefaultScale = mArrow.transform.localScale;
 
 				InitialiseBounceTable ();
-		
-				StartBounce ();
+				Reset ();
 		}
 	
 	#endregion
@@ -36,6 +35,7 @@ public class VenetianArrowBounce : MonoBehaviour
 	
 		public void StartBounce ()
 		{
+				mArrow.SetActive (true);
 				iTween.MoveTo (mArrow, mBounceTable);
 		}
 	
@@ -46,10 +46,10 @@ public class VenetianArrowBounce : MonoBehaviour
 	
 		public void Reset ()
 		{
-				mArrow.transform.position = mDefaultPosition;
-				mArrow.transform.rotation = mDefaultRotation;
-				mArrow.transform.localScale = mDefaultScale;
-				mArrow.SetActive (true);
+//				mArrow.transform.position = mDefaultPosition;
+//				mArrow.transform.rotation = mDefaultRotation;
+//				mArrow.transform.localScale = mDefaultScale;
+				mArrow.SetActive (false);
 				iTween.Stop (mArrow);
 		}
 	
