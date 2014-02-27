@@ -10,13 +10,13 @@ public class HistoryGUIButton : MonoBehaviour {
 	private GameObject backPlane;
 	
 	void Start () {
-		this.gameObject.transform.renderer.material.mainTexture = buttonNormalTexture;
+		this.gameObject.transform.renderer.material.mainTexture = buttonPressedTexture;
 
 		this.historyText = GameObject.Find("HistoryText");
-		this.backPlane = GameObject.Find("HistoryInfo");
+		this.backPlane = GameObject.Find("HistoryPlane");
 
-		this.historyText.SetActive(false);
-		this.backPlane.SetActive(false);
+//		this.historyText.SetActive(false);
+//		this.backPlane.SetActive(false);
 	}
 
 	public void selectGUIButtons() {

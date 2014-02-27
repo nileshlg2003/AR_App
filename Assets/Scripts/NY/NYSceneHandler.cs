@@ -7,7 +7,8 @@ public class NYSceneHandler : MonoBehaviour, ITrackableEventHandler {
 	private GameObject nyImageTarget;
 	private GameObject empireStateBuilding;
 	private GameObject galleryGO;
-	private GameObject historyGO;
+	private GameObject historyPlaneGO;
+	private GameObject historyTextGO;
 
 	//private Vector3 defaultPosition;
 	private Quaternion defaultRotation;
@@ -17,7 +18,8 @@ public class NYSceneHandler : MonoBehaviour, ITrackableEventHandler {
 		this.nyImageTarget = this.gameObject;
 		this.empireStateBuilding = GameObject.Find("EmpireState_fbx");
 		this.galleryGO = GameObject.Find("ImageSlider");
-		this.historyGO = GameObject.Find("HistoryInfo");
+		this.historyPlaneGO = GameObject.Find("HistoryPlane");
+		this.historyTextGO = GameObject.Find("HistoryText");
 
 		this.RecordDefaults();
 
@@ -57,7 +59,8 @@ public class NYSceneHandler : MonoBehaviour, ITrackableEventHandler {
 		this.empireStateBuilding.transform.rotation = this.defaultRotation;
 		this.empireStateBuilding.transform.localScale = this.defaultScale;
 		this.galleryGO.SetActive(false);
-		this.historyGO.SetActive(true);
+		this.historyPlaneGO.SetActive(true);
+		this.historyTextGO.SetActive(true);
 	}
 
 	private void RecordDefaults() {
