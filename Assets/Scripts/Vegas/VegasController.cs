@@ -21,9 +21,15 @@ public class VegasController : MonoBehaviour
 		private Hashtable mFlyThroughTable = new Hashtable ();
 		private static bool mFlyThroughTableInitialized = false;
 
+		// Container
+		private Vector3 mDefaultVegasContainerPosition;
+		private Quaternion mDefaultVegasContainerRotation;
+		private Vector3 mDefaultVegasContainerScale;
+
+		// Vegas
 		private Vector3 mDefaultVegasPosition;
 		private Quaternion mDefaultVegasRotation;
-		private Vector3 mDefaultVegasContainerScale;
+		private Vector3 mDefaultVegasScale;
 
 		private int mFlyThroughTime = 10;
 	
@@ -46,9 +52,15 @@ public class VegasController : MonoBehaviour
 				mVegas.SetActive (false);
 		
 				// Can't set transform directly, so need to save all parts separately
+				// Container
+				mDefaultVegasContainerPosition = mVegasContainer.transform.position;
+				mDefaultVegasContainerRotation = mVegasContainer.transform.rotation;
+				mDefaultVegasContainerScale = mVegasContainer.transform.localScale;
+
+				// Vegas
 				mDefaultVegasPosition = mVegas.transform.position;
 				mDefaultVegasRotation = mVegas.transform.rotation;
-				mDefaultVegasContainerScale = mVegasContainer.transform.localScale;
+				mDefaultVegasScale = mVegas.transform.localScale;
 		}
 	
 		// Update is called once per frame
@@ -126,11 +138,19 @@ public class VegasController : MonoBehaviour
 		public void Reset ()
 		{
 				Debug.Log ("Logan - VegasController - Reset");
+				iTween.Stop (mVegas);
+
+				// Container
+				mVegasContainer.transform.localScale = mDefaultVegasContainerScale;
+				mVegasContainer.transform.position = mDefaultVegasContainerPosition;
+				mVegasContainer.transform.rotation = mDefaultVegasContainerRotation;
+		
+				// Vegas
+				mVegas.transform.localScale = mDefaultVegasScale;
 				mVegas.transform.position = mDefaultVegasPosition;
 				mVegas.transform.rotation = mDefaultVegasRotation;
-				mVegasContainer.transform.localScale = mDefaultVegasContainerScale;
+
 				mVegas.SetActive (false);
-				iTween.Stop (mVegas);
 		}
 	
 	#endregion
