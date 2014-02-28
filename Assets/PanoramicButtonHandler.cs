@@ -16,8 +16,10 @@ public class PanoramicButtonHandler : MonoBehaviour {
 		this.panoCamera.enabled = showPanoramic;
 	}
 	
-	void Update () {
-		
+	void OnGUI() {
+		if (GUI.Button(new Rect(10, 10, 50, 30), "Back")) {
+			this.Hide();
+		}
 	}
 
 	public void selectGUIButtons() {
@@ -35,5 +37,12 @@ public class PanoramicButtonHandler : MonoBehaviour {
 
 		this.panoCamera.enabled = true;
 		this.ARCamera.enabled = false;
+	}
+
+	public void Hide() {
+		this.showPanoramic = false;
+		
+		this.panoCamera.enabled = false;
+		this.ARCamera.enabled = true;
 	}
 }
