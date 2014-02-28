@@ -17,8 +17,13 @@ public class PanoramicButtonHandler : MonoBehaviour {
 	}
 	
 	void OnGUI() {
-		if (GUI.Button(new Rect(10, 10, 50, 30), "Back")) {
-			this.Hide();
+		if (this.showPanoramic) {
+			var buttonX = (Screen.width - 100) / 2.0f;
+			var buttonY = (Screen.height - 50) / 2.0f;
+
+			if (GUI.Button (new Rect (buttonX, buttonY, 100, 50), "Back")) {
+				this.Hide ();
+			}
 		}
 	}
 
