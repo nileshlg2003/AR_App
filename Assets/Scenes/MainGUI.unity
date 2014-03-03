@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mTrackableName: NY_SkyLine
-  mPreviousScale: {x: 20, y: 20, z: 20}
+  mPreviousScale: {x: 924, y: 924, z: 924}
   mPreserveChildSize: 0
   mInitializedInEditor: 1
   mDataSetPath: QCAR/KD_TargetsDB.xml
