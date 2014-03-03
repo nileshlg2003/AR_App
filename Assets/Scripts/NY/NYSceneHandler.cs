@@ -124,22 +124,20 @@ public class NYSceneHandler : MonoBehaviour, ITrackableEventHandler {
 
 	private void ScaleGameObject(Transform buildingTransform)
 	{
-		//current distance between finger touches
 		curDist = Input.GetTouch (0).position - Input.GetTouch (1).position; 
-		//difference in previous locations using delta positions
 		prevDist = ((Input.GetTouch (0).position - Input.GetTouch (0).deltaPosition) - (Input.GetTouch (1).position - Input.GetTouch (1).deltaPosition)); 
 		touchDelta = curDist.magnitude - prevDist.magnitude;
 		
 		if (touchDelta < 0) {
 			float oldScale = buildingTransform.localScale.x;
 			float newScale = oldScale / 1.1f;
-			if(newScale > 0.2) {
+			if(newScale > 0.009) {
 				buildingTransform.localScale = new Vector3 (newScale, newScale, newScale);
 			}
 		} else {
 			float oldScale = buildingTransform.localScale.x;
 			float newScale = oldScale * 1.1f;
-			if(newScale < 2.3) {
+			if(newScale < 0.02) {
 				buildingTransform.localScale = new Vector3 (newScale, newScale, newScale);
 			}
 		}
