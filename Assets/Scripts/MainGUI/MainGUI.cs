@@ -1,100 +1,89 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
-public class MainGUI : MonoBehaviour//, ITrackableEventHandler
+public class MainGUI : MonoBehaviour
 {
 		public GUISkin thisMetalGUISkin;
-		//private TrackableBehaviour mTrackableBehaviour;
 
-		private bool ShowMenu = false;
-		//private bool MenuCollapsed = false;
-		private bool AnimationComplete = false;
+		private bool ShowBottomBar = false;
 
-		// margin is wall to box
-		// padding is box to layout
-		private int margin = 10;
-		private int padding = 10;
-		private int boxHeight = 100;
-		private int buttonWidth = 200;
-		private int buttonHeight = 80;
-	
-		private LTRect button1;
-		private LTRect button2;
-
-		private Rect menuGroup = new Rect(10,10, Screen.width-10,80); //MENU PANEL
+		private float ButtonWidth = 150.0f;
+		private float ButtonHeight = 80.0f;
+		private float Spacing = 5.0f;
 
 		void Start ()
 		{
-
-//				mTrackableBehaviour = gameObject.GetComponent<TrackableBehaviour> ();
-//				if (mTrackableBehaviour) {
-//						mTrackableBehaviour.RegisterTrackableEventHandler (this);
-//				}
-
-				button1 = new LTRect (-2 * (padding + buttonWidth), (padding + buttonHeight), buttonWidth, buttonHeight);
-				button2 = new LTRect (-1 * (padding + buttonWidth), (padding + buttonHeight), buttonWidth, buttonHeight);
-
-				LeanTween.move (button1, new Vector2 (padding, (padding + buttonHeight)), 0.5f).setEase (LeanTweenType.easeOutBack);
-				LeanTween.move (button2, new Vector2 ((2 * padding + buttonWidth), (padding + buttonHeight)), 0.5f).setEase (LeanTweenType.easeOutBack).setDelay (0.3f);
+				if (GUIState.mSelectedModelType == GUIState.ModelType.None) {
+						// Hide the bottom bar
+						ShowBottomBar = false;
+				} else if (GUIState.mSelectedModelType == GUIState.ModelType.NewYorkSkyline || GUIState.mSelectedModelType == GUIState.ModelType.Vegas) {
+						// Show New York Funcs
+						ShowBottomBar = true;
+				}
 		}
-
-		public void OnTrackableStateChanged (TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
-		{
-//				if (newStatus == TrackableBehaviour.Status.DETECTED ||
-//						newStatus == TrackableBehaviour.Status.TRACKED) {
-//						OnTrackingFound ();
-//				} else {
-//						OnTrackingLost ();
-//				}
-		}
-	
-//		private void OnTrackingFound ()
-//		{
-//				ShowMenu = true;
-//		}
-//	
-//		private void OnTrackingLost ()
-//		{
-//				ShowMenu = false;
-//		}
 	
 		void OnGUI ()
 		{
-//				if (!ShowMenu) {
-//						return;
-//				}
-
 				GUI.skin = thisMetalGUISkin;
-
-				GUILayout.BeginArea(menuGroup,"box");
-				if (GUI.Button(button1.rect, "Empire State 3D")) {
-						// Start Async load of AR_App while showing loading scene
-						LoadingOptions.mSceneName = "AR_App";
-						Application.LoadLevel ("LoadingScene");
-				}
-
-				if (GUI.Button (button2.rect, "Vegas 3D")) {
-						// more stuff
-				}
-				GUILayout.EndArea();
-				GUI.DragWindow();
 		
-//				GUILayout.BeginArea (new Rect (margin + padding, margin + padding, Screen.width - (2 * (padding + margin)), boxHeight - (2 * padding)));
-//					
-//				GUILayout.BeginHorizontal (GUI.skin.GetStyle ("box"));
-//					
-//				if (GUILayout.Button ("Empire State 3D", GUILayout.Width (buttonWidth))) {
-//						// Start Async load of AR_App while showing loading scene
+				GUILayout.BeginArea (new Rect (10, 10, 2 * ButtonWidth + 2 * GUI.skin.box.padding.left + GUI.skin.box.padding.right, ButtonHeight));
+					
+				GUILayout.BeginHorizontal (GUI.skin.GetStyle ("box"));
+					
+				if (GUILayout.Button ("Empire State 3D", GUILayout.Width (ButtonWidth))) {
+						// Start Async load of AR_App while showing loading scene
 //						LoadingOptions.mSceneName = "AR_App";
 //						Application.LoadLevel ("LoadingScene");
-//				}
-//
-//				if (GUILayout.Button ("Vegas 3D", GUILayout.Width (buttonWidth))) {
-//						//Application.LoadLevel ("AR_App");
-//				}
-//					
-//				GUILayout.EndHorizontal ();
-//
-//				GUILayout.EndArea ();
+						ShowBottomBar = true;
+						GUIState.mSelectedModelType = GUIState.ModelType.NewYorkSkyline;
+				}
+
+				if (GUILayout.Button ("Vegas 3D", GUILayout.Width (ButtonWidth))) {
+						//Application.LoadLevel ("AR_App");
+						ShowBottomBar = true;
+						GUIState.mSelectedModelType = GUIState.ModelType.Vegas;
+				}
+					
+				GUILayout.EndHorizontal ();
+
+				GUILayout.EndArea ();
+
+				if (ShowBottomBar) {
+						if (GUIState.mSelectedModelType == GUIState.ModelType.NewYorkSkyline) {
+
+								// These values should all be stored and worked with as variables, time constraints etc...
+								GUILayout.BeginArea (new Rect (10, 30 + GUI.skin.button.fixedHeight, 2 * ButtonWidth + 2 * GUI.skin.box.padding.left + GUI.skin.box.padding.right, ButtonHeight));
+				
+								GUILayout.BeginHorizontal (GUI.skin.GetStyle ("box"));
+				
+								if (GUILayout.Button ("Empire Function 1", GUILayout.Width (ButtonWidth))) {
+								}
+				
+								if (GUILayout.Button ("Empire Function 2", GUILayout.Width (ButtonWidth))) {
+								}
+				
+								GUILayout.EndHorizontal ();
+				
+								GUILayout.EndArea ();
+						} else if (GUIState.mSelectedModelType == GUIState.ModelType.Vegas) {
+					
+								GUILayout.BeginArea (new Rect (10, 30 + GUI.skin.button.fixedHeight, 2 * ButtonWidth + 2 * GUI.skin.box.padding.left + GUI.skin.box.padding.right, ButtonHeight));
+					
+								GUILayout.BeginHorizontal (GUI.skin.GetStyle ("box"));
+					
+								if (GUILayout.Button ("Vegas Function 1", GUILayout.Width (ButtonWidth))) {
+								}
+					
+								if (GUILayout.Button ("Vegas Function 2", GUILayout.Width (ButtonWidth))) {
+								}
+					
+								GUILayout.EndHorizontal ();
+					
+								GUILayout.EndArea ();
+						}
+				}
 		}
 }
