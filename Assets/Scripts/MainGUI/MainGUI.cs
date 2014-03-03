@@ -21,6 +21,8 @@ public class MainGUI : MonoBehaviour//, ITrackableEventHandler
 		private LTRect button1;
 		private LTRect button2;
 
+		private Rect menuGroup = new Rect(10,10, Screen.width-10,80); //MENU PANEL
+
 		void Start ()
 		{
 
@@ -61,10 +63,11 @@ public class MainGUI : MonoBehaviour//, ITrackableEventHandler
 //				if (!ShowMenu) {
 //						return;
 //				}
-		
+
 				GUI.skin = thisMetalGUISkin;
-		
-				if (GUI.Button (button1.rect, "Empire State 3D")) {
+
+				GUILayout.BeginArea(menuGroup,"box");
+				if (GUI.Button(button1.rect, "Empire State 3D")) {
 						// Start Async load of AR_App while showing loading scene
 						LoadingOptions.mSceneName = "AR_App";
 						Application.LoadLevel ("LoadingScene");
@@ -73,7 +76,9 @@ public class MainGUI : MonoBehaviour//, ITrackableEventHandler
 				if (GUI.Button (button2.rect, "Vegas 3D")) {
 						// more stuff
 				}
-
+				GUILayout.EndArea();
+				GUI.DragWindow();
+		
 //				GUILayout.BeginArea (new Rect (margin + padding, margin + padding, Screen.width - (2 * (padding + margin)), boxHeight - (2 * padding)));
 //					
 //				GUILayout.BeginHorizontal (GUI.skin.GetStyle ("box"));
