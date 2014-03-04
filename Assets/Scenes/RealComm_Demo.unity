@@ -102,7 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGUISkin: {fileID: 11400000, guid: 873cab5fcd11ab27d0003f1ba220b639, type: 2}
-  mTexture: {fileID: 0}
+  mTexture: {fileID: 2800000, guid: ed7a6591cd11bb27d0003f1ba220b639, type: 3}
+  Image1: {fileID: 2800000, guid: 0637dcdf622834ae288f3a677db81213, type: 3}
+  Image2: {fileID: 2800000, guid: 239e94461c8944ba0ba63303ca6c5346, type: 3}
+  Image3: {fileID: 2800000, guid: e205f476fc61848c38778c56486e87ff, type: 3}
 --- !u!4 &92347773
 Transform:
   m_ObjectHideFlags: 0
