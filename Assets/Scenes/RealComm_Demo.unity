@@ -98,10 +98,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 92347771}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3be8c26f6f3fa254baa18134837950a1, type: 3}
+  m_Script: {fileID: 11500000, guid: a56cf6238c449004b988e46ef50cc131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisMetalGUISkin: {fileID: 11400000, guid: c9133c91cd117417d0000cf8a220b639, type: 2}
+  mGUISkin: {fileID: 11400000, guid: 873cab5fcd11ab27d0003f1ba220b639, type: 2}
+  mTexture: {fileID: 0}
 --- !u!4 &92347773
 Transform:
   m_ObjectHideFlags: 0
