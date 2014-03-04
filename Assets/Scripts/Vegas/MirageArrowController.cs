@@ -27,9 +27,9 @@ public class MirageArrowController : MonoBehaviour
 		void Update ()
 		{
 				// Only update is active
-				if (mMirageArrow.activeSelf) {
-						mMirageArrow.transform.LookAt (Camera.main.transform);
-				}
+//				if (mMirageArrow.activeSelf) {
+//						mMirageArrow.transform.LookAt (Camera.main.transform);
+//				}
 		}
 	
 	#endregion

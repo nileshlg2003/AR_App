@@ -27,9 +27,9 @@ public class LuxorArrowController : MonoBehaviour
 		void Update ()
 		{
 				// Only update is active
-				if (mLuxorArrow.activeSelf) {
-						mLuxorArrow.transform.LookAt (Camera.main.transform);
-				}
+//				if (mLuxorArrow.activeSelf) {
+//						mLuxorArrow.transform.LookAt (Camera.main.transform);
+//				}
 		}
 	
 	#endregion
