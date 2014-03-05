@@ -21,15 +21,15 @@ public class MirageArrowController : MonoBehaviour
 				mDefaultPosition = mMirageArrow.transform.position;
 				mDefaultRotation = mMirageArrow.transform.rotation;
 				mDefaultScale = mMirageArrow.transform.localScale;
-				//mMirageArrow.SetActive (false);
+				mMirageArrow.SetActive (true);
 		}
 	
 		void Update ()
 		{
 				// Only update is active
-//				if (mMirageArrow.activeSelf) {
-//						mMirageArrow.transform.LookAt (Camera.main.transform);
-//				}
+				if (mMirageArrow.activeSelf) {
+						mMirageArrow.transform.LookAt (Camera.main.transform);
+				}
 		}
 	
 	#endregion

@@ -21,7 +21,7 @@ public class LuxorTextController : MonoBehaviour
 				mDefaultPosition = mLuxorText.transform.position;
 				mDefaultRotation = mLuxorText.transform.rotation;
 				mDefaultScale = mLuxorText.transform.localScale;
-				//mLuxorText.SetActive (false);
+				mLuxorText.SetActive (false);
 		}
 	
 		void Update ()
