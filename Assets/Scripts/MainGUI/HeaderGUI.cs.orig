@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 public class HeaderGUI : MonoBehaviour
 {
-    private enum ButtonFunction
+    public enum ButtonFunction
     {
         VegasModel = 1,
         EmpireModel = 2,
@@ -21,9 +22,23 @@ public class HeaderGUI : MonoBehaviour
     public Texture Image1;
     public Texture Image2;
     public Texture Image3;
+<<<<<<< HEAD
     
+    public GameObject mEmpireStateBuilding;
+    public GameObject mVegasStrip;
+		
+=======
+	public GameObject mEmpireStateBuilding;
+	public GameObject mVegasStrip;
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
     private IList<Texture> mImages;
-    
+
+    // Panoramic Related
+    public Camera panoCamera;
+    public Camera ARCamera;
+    public Material panoramicMaterial;
+    public bool showPanoramic = false;
+
     // Screen params
     private int w;
     private int h;
@@ -36,6 +51,9 @@ public class HeaderGUI : MonoBehaviour
     private float mButtonOffset;
     private RectOffset mBoxPadding;
     private LTRect mTopBarBox;
+    private float mBoxDeltaHeight;
+    private float mButtonDeltaHeight;
+    private float mBounceOffset;
     
     // Image Slider GUI props
     private float mImageSliderWidth;
@@ -46,14 +64,21 @@ public class HeaderGUI : MonoBehaviour
     private LTRect mNextButton;
     private int mSelectedImageIndex;
     
+    // Info Box GUI props
+    private float mInfoBoxWidth;
+    private float mInfoBoxHeight;
+    private LTRect mInfoBoxBox;
+    private Vector2 mInfoBoxScrollPosition;
+    
     // GUI state props
     private ButtonFunction mSelectedFunction;
     
     // Show/Hide bools
     private bool mShowImageSlider;
+    private bool mShowInfoBox;
     
     // Lists etc.
-    private static IList<KeyValuePair<ButtonFunction, LTRect>> mButtons = new List<KeyValuePair<ButtonFunction, LTRect>>();
+    private static IList<CustomButton> mButtons = new List<CustomButton>();
     private static Dictionary<ButtonFunction, string> mButtonFunctions = new Dictionary<ButtonFunction, string>()
     {
         {ButtonFunction.VegasModel, "Vegas Model"},
@@ -77,6 +102,7 @@ public class HeaderGUI : MonoBehaviour
         mButtonHeight = 30.0f;
         mTopOffset = 10.0f;
         mButtonOffset = 5.0f;
+        mBounceOffset = 3.0f;
         mBoxPadding = new RectOffset(5, 5, 5, 5);
 
         // TODO: Hard code or variable?
@@ -84,6 +110,9 @@ public class HeaderGUI : MonoBehaviour
         mImageSliderWidth = temp / 2;
         mImageSliderHeight = temp / 2;
         mSliderButtonOffset = 30.0f;
+        
+        mInfoBoxWidth = w * 0.75f;
+        mInfoBoxHeight = h * 0.75f;
 
         mSelectedImageIndex = 0;
         mShowImageSlider = false;
@@ -93,8 +122,15 @@ public class HeaderGUI : MonoBehaviour
 
     void Start()
     {
+        panoCamera.enabled = showPanoramic;
+
         InitButtonsGUI();
         InitSlider();
+<<<<<<< HEAD
+        InitInfoBox();
+=======
+        Reset();
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
     }
 
     void OnGUI()
@@ -103,6 +139,19 @@ public class HeaderGUI : MonoBehaviour
 
         ButtonsGUI();
         ImageSliderGUI();
+<<<<<<< HEAD
+        InfoBoxGUI();
+=======
+
+        if (showPanoramic) {
+            var buttonX = (Screen.width - 100) / 2.0f;
+            var buttonY = (Screen.height - 50) / 2.0f;
+            
+            if (GUI.Button (new Rect (buttonX, buttonY, 100, 50), "Back")) {
+                HidePanoramic();
+            }
+        }
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
     }
 
     #endregion
@@ -114,9 +163,9 @@ public class HeaderGUI : MonoBehaviour
         GUI.Box(mTopBarBox.rect, "");
         foreach (var button in mButtons)
         {
-            if (GUI.Button(button.Value.rect, mButtonFunctions [button.Key]))
+            if (GUI.Button(button.mRect.rect, button.mText))
             {
-                HandleButtonClick(button.Key);
+                HandleButtonClick(button.mFunction);
             }
         }
     }
@@ -130,20 +179,21 @@ public class HeaderGUI : MonoBehaviour
 
             // Reset all to hidden, then display the one we want, easier to manage
             Reset();
-
+            BounceButton(selectedFunction);
             switch (selectedFunction)
             {
                 case ButtonFunction.VegasModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.VegasModel]);
+                    SetupVegasModel();
                     break;
                 case ButtonFunction.EmpireModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.EmpireModel]);
+                    SetupEmpireStateModel();
                     break;
                 case ButtonFunction.EmpireImageSlider:
                     //Debug.Log (mButtonFunctions [ButtonFunction.EmpireImageSlider]);
                     mShowImageSlider = true;
                     break;
                 case ButtonFunction.EmpireInfo:
+                    mShowInfoBox = true;
                     //Debug.Log (mButtonFunctions [ButtonFunction.EmpireInfo]);
                     break;
                 default:
@@ -170,22 +220,44 @@ public class HeaderGUI : MonoBehaviour
         float totalBoxHeight = mButtonHeight + boxTopBottomPadding;
         float boxLeftPos = midPoint - (totalBoxWidth / 2);
         float boxTopPos = mTopOffset;
-        mTopBarBox = new LTRect(new Rect(boxLeftPos, boxTopPos, totalBoxWidth, totalBoxHeight));
+        mBoxDeltaHeight = mTopOffset + totalBoxHeight;
+        mTopBarBox = new LTRect(new Rect(boxLeftPos, boxTopPos - mBoxDeltaHeight, totalBoxWidth, totalBoxHeight));
 
         float buttonTop = boxTopPos + mBoxPadding.top;
+        mButtonDeltaHeight = buttonTop + mButtonHeight;
         int count = 0;
         foreach (var kvp in mButtonFunctions)
         {
             float buttonLeft = boxLeftPos + mBoxPadding.left + count * (mButtonWidth + mButtonOffset);
-            LTRect button = new LTRect(new Rect(buttonLeft, buttonTop, mButtonWidth, mButtonHeight));
-            mButtons.Add(new KeyValuePair<ButtonFunction, LTRect>(kvp.Key, button));
+            LTRect rect = new LTRect(new Rect(buttonLeft, buttonTop - mButtonDeltaHeight, mButtonWidth, mButtonHeight));
+            mButtons.Add(new CustomButton(kvp.Key, kvp.Value, rect));
             count++;
         }
+        
+        ExpandButtons();
     }
 
     void ExpandButtons()
     {
-
+        LeanTween.move(mTopBarBox, new Vector2(mTopBarBox.rect.x, mTopBarBox.rect.y + mBoxDeltaHeight), 1.0f).setEase(LeanTweenType.easeOutExpo).setDelay(0.5f);
+        
+        int count = 0;
+        foreach (var button in mButtons)
+        {
+            float extraDelay = count * 0.1f;
+            LeanTween.move(button.mRect, new Vector2(button.mRect.rect.x, button.mRect.rect.y + mButtonDeltaHeight), 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay);
+            count++;
+        }
+    }
+    
+    void BounceButton(ButtonFunction selectedFunction)
+    {
+        LTRect buttonRect = mButtons.Where(b => b.mFunction == selectedFunction).Select(b => b.mRect).First();
+        if (!LeanTween.isTweening(buttonRect))
+        {
+            LeanTween.move(buttonRect, new Vector2(buttonRect.x, buttonRect.y - mButtonOffset), 0.1f).setEase(LeanTweenType.easeOutCubic)
+                .setOnComplete(() => LeanTween.move(buttonRect, new Vector2(buttonRect.x, buttonRect.y + mButtonOffset), 0.5f).setEase(LeanTweenType.easeOutBounce));
+        }
     }
 
     #endregion
@@ -197,21 +269,34 @@ public class HeaderGUI : MonoBehaviour
         if (mShowImageSlider)
         {
             GUI.DrawTexture(mImageSliderBox.rect, mTexture);
-            GUI.DrawTexture(mImageSliderBox.rect, mImages [mSelectedImageIndex]);
+            GUI.DrawTexture(mImageSliderBox.rect, mImages[mSelectedImageIndex]);
             if (GUI.Button(mPrevButton.rect, "Prev"))
             {
+<<<<<<< HEAD
                 mSelectedImageIndex--;
                 if (mSelectedImageIndex < 0)
                 {
-                    mSelectedImageIndex = 0;
+                    mSelectedImageIndex = mImages.Count - 1;
+=======
+                if (mSelectedImageIndex > 0) {
+                    mSelectedImageIndex--;
+                } else {
+                    mSelectedImageIndex = mImages.Count-1;
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
                 }
             }
             if (GUI.Button(mNextButton.rect, "Next"))
             {
+<<<<<<< HEAD
                 mSelectedImageIndex++;
                 if (mSelectedImageIndex > mImages.Count - 1)
                 {
-                    mSelectedImageIndex = mImages.Count - 1;
+=======
+                if (mSelectedImageIndex < mImages.Count-1) {
+                    mSelectedImageIndex++;
+                } else {
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
+                    mSelectedImageIndex = 0;
                 }
             }
         }
@@ -222,64 +307,9 @@ public class HeaderGUI : MonoBehaviour
         // TODO: This can be refactored when we figure out how to load from a zip file or folder etc.
         mImages = new List<Texture>()
 		{
-<<<<<<< HEAD
 			Image1,
 			Image2,
 			Image3
-=======
-				VegasModel = 1,
-				EmpireModel = 2,
-				EmpireImageSlider = 3,
-				EmpireInfo = 4
-		}
-
-	#region Fields
-
-		public GUISkin mGUISkin;
-		public Texture mTexture;
-
-		public Texture Image1;
-		public Texture Image2;
-		public Texture Image3;
-
-		public GameObject mEmpireStateBuilding;
-		public GameObject mVegasStrip;
-		
-		private IList<Texture> mImages;
-
-		private int w;
-		private int h;
-		private int nButtons;
-
-		private float mButtonWidth;
-		private float mButtonHeight;
-
-		private float mTopOffset;
-		private float mButtonOffset;
-
-		private RectOffset mBoxPadding;
-
-		private LTRect mTopBarBox;
-
-		private float mImageSliderWidth;
-		private float mImageSliderHeight;
-		private float mSliderButtonOffset;
-		private LTRect mImageSliderBox;
-		private LTRect mPrevButton;
-		private LTRect mNextButton;
-		private int mSelectedImageIndex;
-		private bool mShowImageSlider;
-
-		private ButtonFunction mSelectedFunction;
-	
-		private static IList<KeyValuePair<ButtonFunction, LTRect>> mButtons = new List<KeyValuePair<ButtonFunction, LTRect>> ();
-		private static Dictionary<ButtonFunction, string> mButtonFunctions = new Dictionary<ButtonFunction, string> ()
-		{
-			{ButtonFunction.VegasModel, "Vegas Model"},
-			{ButtonFunction.EmpireModel, "Empire Model"},
-			{ButtonFunction.EmpireImageSlider, "Empire Image Slider"},
-			{ButtonFunction.EmpireInfo, "Empire Info"}
->>>>>>> 94571e44acc271874036f3892ed4b46afa7c9b27
 		};
 
         float sliderLeft = (w / 2) - (mImageSliderWidth / 2);
@@ -313,6 +343,33 @@ public class HeaderGUI : MonoBehaviour
 //		}
 
     #endregion
+    
+    #region Info Box GUI
+
+    void InfoBoxGUI()
+    {
+        if (mShowInfoBox)
+        {
+            // TODO: Change background of are to be something more awesome
+            GUI.Box(mInfoBoxBox.rect, "");
+            GUILayout.BeginArea(mInfoBoxBox.rect);
+            mInfoBoxScrollPosition = GUILayout.BeginScrollView(mInfoBoxScrollPosition, GUILayout.Width(mInfoBoxWidth), GUILayout.Height(mInfoBoxHeight));
+            
+            GUILayout.Label("BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF BLAH BLAHDFAGFH ADSLGHADGLHADGF ");
+            
+            GUILayout.EndScrollView();
+            GUILayout.EndArea();
+        }
+    }
+    
+    void InitInfoBox()
+    {
+        float infoBoxLeft = (w / 2) - (mInfoBoxWidth / 2);
+        float infoBoxTop = (h / 2) - (mInfoBoxHeight / 2);
+        mInfoBoxBox = new LTRect(new Rect(infoBoxLeft, infoBoxTop, mInfoBoxWidth, mInfoBoxHeight));
+    }
+    
+    #endregion
 
     #region General Methods
     
@@ -320,7 +377,57 @@ public class HeaderGUI : MonoBehaviour
     {		
         // Hide all elements here
         mShowImageSlider = false;
+<<<<<<< HEAD
+        mShowInfoBox = false;
+=======
+        mVegasStrip.SetActive(false);
+        mEmpireStateBuilding.SetActive(false);
+>>>>>>> 88cbea0c48eb8708513da2e849e88b0de1e6d64a
     }
     
+    void SetupVegasModel()
+    {
+        mVegasStrip.SetActive(true);
+    }
+    
+    void SetupEmpireStateModel()
+    {
+        mEmpireStateBuilding.SetActive(true);     
+    }
+    
+    void ShowPanoramic() {
+        showPanoramic = true;
+        
+        RenderSettings.skybox = panoramicMaterial;
+        
+        panoCamera.enabled = true;
+        ARCamera.enabled = false;
+    }
+    
+    void HidePanoramic() {
+        showPanoramic = false;
+        
+        panoCamera.enabled = false;
+        ARCamera.enabled = true;
+    }
+
     #endregion
+}
+
+class CustomButton
+{
+    public HeaderGUI.ButtonFunction mFunction { get; set; }
+    
+    public string mText { get; set; }
+    
+    public LTRect mRect { get; set; }
+    
+    public bool mTweening = false;
+    
+    public CustomButton(HeaderGUI.ButtonFunction function, string text, LTRect rect)
+    {
+        mFunction = function;
+        mText = text;
+        mRect = rect;
+    }
 }
