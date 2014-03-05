@@ -7,8 +7,8 @@ using System;
 
 public class ButtonsGUI : MonoBehaviour
 {
-    // Comes from iPad 2
-    public const float DEFAULT_DPI = 132.0f;
+    public const float BUTTON_WIDTH_SCALE = 0.15f;
+    public const float BUTTON_HEIGHT_SCALE = 0.03f;
 
     public enum ButtonFunction
     {
@@ -34,7 +34,6 @@ public class ButtonsGUI : MonoBehaviour
     // Screen params
     private int _W;
     private int _H;
-    private float _Scale;
     
     // Header GUI props
     private int _NumButtons;
@@ -76,10 +75,9 @@ public class ButtonsGUI : MonoBehaviour
         // declaration time, like some values were just not getting set
         _W = Screen.width;
         _H = Screen.height;
-        _Scale = Screen.dpi > 0 ? Screen.dpi / DEFAULT_DPI : 1.0f;
         
-        _ButtonWidth = _W * 0.15f;
-        _ButtonHeight = _H * 0.025f;
+        _ButtonWidth = _W * BUTTON_WIDTH_SCALE;
+        _ButtonHeight = _H * BUTTON_HEIGHT_SCALE;
         _TopOffset = _H * 0.01f;
         _ButtonOffset = _H * 0.005f;
         _BounceOffset = _H * 0.005f;
@@ -115,13 +113,6 @@ public class ButtonsGUI : MonoBehaviour
     
     void Init()
     {
-        if (GUISkin != null)
-        {
-            _ButtonWidth = GUISkin.button.fixedWidth;
-            _ButtonHeight = GUISkin.button.fixedHeight;
-            _BoxPadding = GUISkin.box.padding;
-        }
-        
         float midPoint = _W / 2;
         float betweenButtons = (_NumButtons - 1) * _ButtonOffset;
         float boxLeftRightPadding = _BoxPadding.left + _BoxPadding.right;

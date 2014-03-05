@@ -46,8 +46,8 @@ public class ImageSliderGUI : MonoBehaviour
         _H = Screen.height;
         
         // Percentage of screen
-        _ButtonWidth = _W * 0.15f;
-        _ButtonHeight = _H * 0.025f;
+        _ButtonWidth = _W * ButtonsGUI.BUTTON_WIDTH_SCALE;
+        _ButtonHeight = _H * ButtonsGUI.BUTTON_HEIGHT_SCALE;
         
         // TODO: Hard code or variable?
         float temp = _W < _H ? _W : _H;
@@ -101,12 +101,6 @@ public class ImageSliderGUI : MonoBehaviour
     
     void Init()
     {
-        if (GUISkin != null)
-        {
-            _ButtonWidth = GUISkin.button.fixedWidth;
-            _ButtonHeight = GUISkin.button.fixedHeight;
-        }
-    
         // TODO: This can be refactored when we figure out how to load from a zip file or folder etc.
         _Images = new List<Texture>()
         {
