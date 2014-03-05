@@ -22,6 +22,9 @@ public class HeaderGUI : MonoBehaviour
 		public Texture Image2;
 		public Texture Image3;
 
+		public GameObject mEmpireStateBuilding;
+		public GameObject mVegasStrip;
+		
 		private IList<Texture> mImages;
 
 		private int w;
