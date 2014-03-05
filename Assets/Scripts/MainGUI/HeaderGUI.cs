@@ -24,7 +24,13 @@ public class HeaderGUI : MonoBehaviour
 	public GameObject mEmpireStateBuilding;
 	public GameObject mVegasStrip;
     private IList<Texture> mImages;
-    
+
+    // Panoramic Related
+    public Camera panoCamera;
+    public Camera ARCamera;
+    public Material panoramicMaterial;
+    public bool showPanoramic = false;
+
     // Screen params
     private int w;
     private int h;
@@ -94,6 +100,8 @@ public class HeaderGUI : MonoBehaviour
 
     void Start()
     {
+        panoCamera.enabled = showPanoramic;
+
         InitButtonsGUI();
         InitSlider();
         Reset();
@@ -105,6 +113,15 @@ public class HeaderGUI : MonoBehaviour
 
         ButtonsGUI();
         ImageSliderGUI();
+
+        if (showPanoramic) {
+            var buttonX = (Screen.width - 100) / 2.0f;
+            var buttonY = (Screen.height - 50) / 2.0f;
+            
+            if (GUI.Button (new Rect (buttonX, buttonY, 100, 50), "Back")) {
+                HidePanoramic();
+            }
+        }
     }
 
     #endregion
@@ -199,21 +216,21 @@ public class HeaderGUI : MonoBehaviour
         if (mShowImageSlider)
         {
             GUI.DrawTexture(mImageSliderBox.rect, mTexture);
-            GUI.DrawTexture(mImageSliderBox.rect, mImages [mSelectedImageIndex]);
+            GUI.DrawTexture(mImageSliderBox.rect, mImages[mSelectedImageIndex]);
             if (GUI.Button(mPrevButton.rect, "Prev"))
             {
-                mSelectedImageIndex--;
-                if (mSelectedImageIndex < 0)
-                {
-                    mSelectedImageIndex = 0;
+                if (mSelectedImageIndex > 0) {
+                    mSelectedImageIndex--;
+                } else {
+                    mSelectedImageIndex = mImages.Count-1;
                 }
             }
             if (GUI.Button(mNextButton.rect, "Next"))
             {
-                mSelectedImageIndex++;
-                if (mSelectedImageIndex > mImages.Count - 1)
-                {
-                    mSelectedImageIndex = mImages.Count - 1;
+                if (mSelectedImageIndex < mImages.Count-1) {
+                    mSelectedImageIndex++;
+                } else {
+                    mSelectedImageIndex = 0;
                 }
             }
         }
@@ -280,5 +297,22 @@ public class HeaderGUI : MonoBehaviour
     {
         mEmpireStateBuilding.SetActive(true);     
     }
+    
+    void ShowPanoramic() {
+        showPanoramic = true;
+        
+        RenderSettings.skybox = panoramicMaterial;
+        
+        panoCamera.enabled = true;
+        ARCamera.enabled = false;
+    }
+    
+    void HidePanoramic() {
+        showPanoramic = false;
+        
+        panoCamera.enabled = false;
+        ARCamera.enabled = true;
+    }
+
     #endregion
 }
