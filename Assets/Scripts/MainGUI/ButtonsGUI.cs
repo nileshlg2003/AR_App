@@ -8,7 +8,7 @@ using System;
 public class ButtonsGUI : MonoBehaviour
 {
     public const float BUTTON_WIDTH_SCALE = 0.15f;
-    public const float BUTTON_HEIGHT_SCALE = 0.03f;
+    public const float BUTTON_HEIGHT_SCALE = 0.02f;
 
     public enum ButtonFunction
     {
@@ -24,7 +24,8 @@ public class ButtonsGUI : MonoBehaviour
     // Public properties
     public GUISkin GUISkin;
     public GameObject EmpireStateBuilding;
-    public GameObject VegasStrip;
+    
+    public VegasStrip_Handler VegasStripHandler;
     
     public InfoBoxGUI InfoBoxGUI;
     public ImageSliderGUI ImageSliderGUI;
@@ -159,7 +160,6 @@ public class ButtonsGUI : MonoBehaviour
                     SetupEmpireStateModel();
                     break;
                 case ButtonFunction.EmpireImageSlider:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.EmpireImageSlider]);
                     ImageSliderGUI.Show();
                     break;
                 case ButtonFunction.EmpireInfo:
@@ -231,13 +231,13 @@ public class ButtonsGUI : MonoBehaviour
             PanoramicGUI.Hide();
         }
         
-        VegasStrip.SetActive(false);
+        VegasStripHandler.Hide();
         EmpireStateBuilding.SetActive(false);
     }
     
     void SetupVegasModel()
     {
-        VegasStrip.SetActive(true);
+        VegasStripHandler.Show();
     }
     
     void SetupEmpireStateModel()
