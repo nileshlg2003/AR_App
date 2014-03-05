@@ -15,7 +15,6 @@ public class ImageSliderGUI : MonoBehaviour
     // Screen params
     private int _W;
     private int _H;
-    private float _Scale;
     
     private int _Depth;
     
@@ -45,16 +44,16 @@ public class ImageSliderGUI : MonoBehaviour
         
         _W = Screen.width;
         _H = Screen.height;
-        _Scale = Screen.dpi > 0 ? Screen.dpi / ButtonsGUI.DEFAULT_DPI : 1.0f;
         
-        _ButtonWidth = 150.0f * _Scale;
-        _ButtonHeight = 30.0f * _Scale;
+        // Percentage of screen
+        _ButtonWidth = _W * 0.15f;
+        _ButtonHeight = _H * 0.025f;
         
         // TODO: Hard code or variable?
         float temp = _W < _H ? _W : _H;
         _ImageSliderWidth = temp / 2;
         _ImageSliderHeight = temp / 2;
-        _SliderButtonOffset = (30.0f) * _Scale;
+        _SliderButtonOffset = _H * 0.0375f;
         
         _SelectedImageIndex = 0;
         

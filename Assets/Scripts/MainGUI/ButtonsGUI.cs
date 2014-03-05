@@ -77,16 +77,16 @@ public class ButtonsGUI : MonoBehaviour
         _W = Screen.width;
         _H = Screen.height;
         _Scale = Screen.dpi > 0 ? Screen.dpi / DEFAULT_DPI : 1.0f;
-
-        _ButtonWidth = 150.0f * _Scale;
-        _ButtonHeight = 30.0f * _Scale;
-        _TopOffset = 10.0f * _Scale;
-        _ButtonOffset = 5.0f * _Scale;
-        _BounceOffset = 3.0f * _Scale;
         
-        int padding = Convert.ToInt32(Math.Round(5 * _Scale, MidpointRounding.AwayFromZero));
+        _ButtonWidth = _W * 0.15f;
+        _ButtonHeight = _H * 0.025f;
+        _TopOffset = _H * 0.01f;
+        _ButtonOffset = _H * 0.005f;
+        _BounceOffset = _H * 0.005f;
+        
+        int padding = Convert.ToInt32(Math.Round(_H * 0.005f, MidpointRounding.AwayFromZero));
         _BoxPadding = new RectOffset(padding, padding, padding, padding);
-
+        
         _NumButtons = _ButtonFunctions.Count;
     }
 
