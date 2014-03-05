@@ -11,7 +11,7 @@ public class InfoBoxGUI : MonoBehaviour
     private int _W;
     private int _H;
     
-    private int _Depth = 1;
+    private int _Depth;
     
     // Info Box GUI props
     private float _InfoBoxWidth;
@@ -24,6 +24,8 @@ public class InfoBoxGUI : MonoBehaviour
 
     void Awake()
     {
+        _Depth = 1;
+        
         _W = Screen.width;
         _H = Screen.height;
         

@@ -7,6 +7,9 @@ using System;
 
 public class ButtonsGUI : MonoBehaviour
 {
+    // Comes from iPad 2
+    public const float DEFAULT_DPI = 132.0f;
+
     public enum ButtonFunction
     {
         VegasModel = 1,
@@ -31,6 +34,7 @@ public class ButtonsGUI : MonoBehaviour
     // Screen params
     private int _W;
     private int _H;
+    private float _Scale;
     
     // Header GUI props
     private int _NumButtons;
@@ -72,13 +76,16 @@ public class ButtonsGUI : MonoBehaviour
         // declaration time, like some values were just not getting set
         _W = Screen.width;
         _H = Screen.height;
+        _Scale = Screen.dpi > 0 ? Screen.dpi / DEFAULT_DPI : 1.0f;
 
-        _ButtonWidth = 150.0f;
-        _ButtonHeight = 30.0f;
-        _TopOffset = 10.0f;
-        _ButtonOffset = 5.0f;
-        _BounceOffset = 3.0f;
-        _BoxPadding = new RectOffset(5, 5, 5, 5);
+        _ButtonWidth = 150.0f * _Scale;
+        _ButtonHeight = 30.0f * _Scale;
+        _TopOffset = 10.0f * _Scale;
+        _ButtonOffset = 5.0f * _Scale;
+        _BounceOffset = 3.0f * _Scale;
+        
+        int padding = Convert.ToInt32(Math.Round(5 * _Scale, MidpointRounding.AwayFromZero));
+        _BoxPadding = new RectOffset(padding, padding, padding, padding);
 
         _NumButtons = _ButtonFunctions.Count;
     }
@@ -100,11 +107,6 @@ public class ButtonsGUI : MonoBehaviour
                 HandleButtonClick(button.mFunction);
             }
         }
-        
-        //ButtonsGUI();
-        //ImageSliderGUI();
-        //InfoBoxGUI();
-        //PanoramicGUI();
     }
 
     #endregion

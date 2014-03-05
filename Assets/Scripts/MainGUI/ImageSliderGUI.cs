@@ -15,8 +15,9 @@ public class ImageSliderGUI : MonoBehaviour
     // Screen params
     private int _W;
     private int _H;
+    private float _Scale;
     
-    private int _Depth = 1;
+    private int _Depth;
     
     private float _ButtonWidth;
     private float _ButtonHeight;
@@ -40,17 +41,20 @@ public class ImageSliderGUI : MonoBehaviour
     
     void Awake()
     {
+        _Depth = 1;
+        
         _W = Screen.width;
         _H = Screen.height;
+        _Scale = Screen.dpi > 0 ? Screen.dpi / ButtonsGUI.DEFAULT_DPI : 1.0f;
         
-        _ButtonWidth = 150.0f;
-        _ButtonHeight = 30.0f;
+        _ButtonWidth = 150.0f * _Scale;
+        _ButtonHeight = 30.0f * _Scale;
         
         // TODO: Hard code or variable?
         float temp = _W < _H ? _W : _H;
         _ImageSliderWidth = temp / 2;
         _ImageSliderHeight = temp / 2;
-        _SliderButtonOffset = 30.0f;
+        _SliderButtonOffset = (30.0f) * _Scale;
         
         _SelectedImageIndex = 0;
         
