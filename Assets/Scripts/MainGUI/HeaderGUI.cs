@@ -28,18 +28,28 @@ public class HeaderGUI : MonoBehaviour
 		private int h;
 		private int nButtons;
 
-		private float mButtonWidth = 150.0f;
-		private float mButtonHeight = 30.0f;
+		private float mButtonWidth;
+		private float mButtonHeight;
 
-		private float mTopOffset = 10.0f;
-		private float mButtonOffset = 5.0f;
+		private float mTopOffset;
+		private float mButtonOffset;
 
-		private RectOffset mBoxPadding = new RectOffset (5, 5, 5, 5);
-		private RectOffset mButtonPadding = new RectOffset (5, 5, 5, 5);
+		private RectOffset mBoxPadding;
 
 		private LTRect mTopBarBox;
-		private static IList<KeyValuePair<ButtonFunction, LTRect>> mButtons = new List<KeyValuePair<ButtonFunction, LTRect>> ();
 
+		private float mImageSliderWidth;
+		private float mImageSliderHeight;
+		private float mSliderButtonOffset;
+		private LTRect mImageSliderBox;
+		private LTRect mPrevButton;
+		private LTRect mNextButton;
+		private int mSelectedImageIndex;
+		private bool mShowImageSlider;
+
+		private ButtonFunction mSelectedFunction;
+	
+		private static IList<KeyValuePair<ButtonFunction, LTRect>> mButtons = new List<KeyValuePair<ButtonFunction, LTRect>> ();
 		private static Dictionary<ButtonFunction, string> mButtonFunctions = new Dictionary<ButtonFunction, string> ()
 		{
 			{ButtonFunction.VegasModel, "Vegas Model"},
@@ -48,25 +58,38 @@ public class HeaderGUI : MonoBehaviour
 			{ButtonFunction.EmpireInfo, "Empire Info"}
 		};
 
-		private float mImageSliderWidth = 150.0f;
-		private float mImageSliderHeight = 150.0f;
-		private float mSliderButtonOffset = 30.0f;
-		private LTRect mImageSliderBox;
-		private LTRect mPrevButton;
-		private LTRect mNextButton;
-		private int mSelectedImageIndex = 0;
-		private bool mShowImageSlider = false;
-
-		private ButtonFunction mSelectedFunction;
-
 	#endregion
 
 	#region Events
 
-		// Use this for initialization
+		void Awake ()
+		{
+				// Weird stuff was happening when these were being initialized at
+				// declaration time, like some values were just not getting set
+				w = Screen.width;
+				h = Screen.height;
+
+				mButtonWidth = 150.0f;
+				mButtonHeight = 30.0f;
+				mTopOffset = 10.0f;
+				mButtonOffset = 5.0f;
+				mBoxPadding = new RectOffset (5, 5, 5, 5);
+
+				// TODO: Hard code or variable?
+				float temp = w < h ? w : h;
+				mImageSliderWidth = temp / 2;
+				mImageSliderHeight = temp / 2;
+				mSliderButtonOffset = 30.0f;
+
+				mSelectedImageIndex = 0;
+				mShowImageSlider = false;
+
+				nButtons = mButtonFunctions.Count;
+		}
+
 		void Start ()
 		{
-				InitGUI ();
+				InitButtonsGUI ();
 				InitSlider ();
 		}
 
@@ -74,19 +97,23 @@ public class HeaderGUI : MonoBehaviour
 		{
 				GUI.skin = mGUISkin;
 
-				GUI.Box (mTopBarBox.rect, "");
-				foreach (var button in mButtons) {
-						if (GUI.Button (button.Value.rect, mButtonFunctions [button.Key])) {
-								HandleButtonClick (button.Key);
-						}
-				}
-
+				ButtonsGUI ();
 				ImageSliderGUI ();
 		}
 
 	#endregion
 
 	#region GUI Methods
+
+		void ButtonsGUI ()
+		{
+				GUI.Box (mTopBarBox.rect, "");
+				foreach (var button in mButtons) {
+						if (GUI.Button (button.Value.rect, mButtonFunctions [button.Key])) {
+								HandleButtonClick (button.Key);
+						}
+				}
+		}
 
 		void HandleButtonClick (ButtonFunction selectedFunction)
 		{
@@ -117,17 +144,12 @@ public class HeaderGUI : MonoBehaviour
 				}
 		}
 	
-		void InitGUI ()
+		void InitButtonsGUI ()
 		{
-				w = Screen.width;
-				h = Screen.height;
-				nButtons = mButtonFunctions.Count;
-
 				if (mGUISkin != null) {
 						mButtonWidth = mGUISkin.button.fixedWidth;
 						mButtonHeight = mGUISkin.button.fixedHeight;
 						mBoxPadding = mGUISkin.box.padding;
-						mButtonPadding = mGUISkin.button.padding;
 				}
 
 				float midPoint = w / 2;
@@ -185,19 +207,13 @@ public class HeaderGUI : MonoBehaviour
 					Image3
 				};
 
-				// Weird shit going down here, things are coming up 0 when they should have a value :?
-				float sliderLeft = (w / 2) - (mButtonWidth / 2);
-				float sliderTop = (h / 2) - (mButtonWidth / 2);
-				Debug.Log ("mImageSliderWidth" + mButtonWidth);
-				Debug.Log ("mImageSliderHeight" + mButtonWidth);
-				Debug.Log ("mSliderButtonOffset" + mSliderButtonOffset);
-				mImageSliderBox = new LTRect (new Rect (sliderLeft, sliderTop, mButtonWidth, mButtonWidth));
+				float sliderLeft = (w / 2) - (mImageSliderWidth / 2);
+				float sliderTop = (h / 2) - (mImageSliderHeight / 2);
+				mImageSliderBox = new LTRect (new Rect (sliderLeft, sliderTop, mImageSliderWidth, mImageSliderHeight));
 
 				float buttonTop = h / 2 + mButtonHeight / 2;
-//				float prevButtonLeft = sliderLeft - (mSliderButtonOffset + mButtonWidth);
-//				float nextButtonLeft = sliderLeft + mButtonWidth + mSliderButtonOffset;
-				float prevButtonLeft = sliderLeft - (30.0f + mButtonWidth);
-				float nextButtonLeft = sliderLeft + mButtonWidth + 30.0f;
+				float prevButtonLeft = sliderLeft - (mSliderButtonOffset + mButtonWidth);
+				float nextButtonLeft = sliderLeft + mImageSliderWidth + mSliderButtonOffset;
 				mPrevButton = new LTRect (new Rect (prevButtonLeft, buttonTop, mButtonWidth, mButtonHeight));
 				mNextButton = new LTRect (new Rect (nextButtonLeft, buttonTop, mButtonWidth, mButtonHeight));
 		}
@@ -226,7 +242,7 @@ public class HeaderGUI : MonoBehaviour
 
 		void Reset ()
 		{
-				// Do hiding of all elements here
+				// Hide all elements here
 				mShowImageSlider = false;
 		}
 
