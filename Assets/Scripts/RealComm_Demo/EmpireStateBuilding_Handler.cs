@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EmpireStateBuilding_Demo: MonoBehaviour {
+public class EmpireStateBuilding_Handler: MonoBehaviour {
 	
 	private float touchDelta = 0.0F;
 	private float curPos = 0.0F;
@@ -15,49 +15,26 @@ public class EmpireStateBuilding_Demo: MonoBehaviour {
 	}
 	
 	void Update () {
-		if (Input.touchCount == 1 &&
-		    Input.GetTouch (0).phase == TouchPhase.Moved) {
+        if (this.gameObject.activeSelf)
+        {
+            if (Input.touchCount == 1 &&
+                Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
 			
-			Ray ray = Camera.main.ScreenPointToRay (Input.GetTouch(0).position);				
-			RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);				
+                RaycastHit hit;
 			
-			if (Physics.Raycast (ray, out hit)) {
-				string gameObjectName = hit.collider.gameObject.name;
-				
-				if(gameObjectName.Equals("EmpireStateBuilding"))
-				{
-					this.RotateGameObject(hit.collider.gameObject.transform);
-				}
-			}
-		} else if (Input.touchCount == 2 && 
-		           Input.GetTouch(0).phase == TouchPhase.Moved && 
-		           Input.GetTouch(1).phase == TouchPhase.Moved) {
-			
-			Touch touch1 = Input.GetTouch(0);
-			Touch touch2 = Input.GetTouch(1);
-			
-			RaycastHit hit1;
-			string gameObjectName1 = null;
-			Ray ray1 = Camera.main.ScreenPointToRay (touch1.position);
-			
-			RaycastHit hit2;
-			string gameObjectName2 = null;
-			Ray ray2 = Camera.main.ScreenPointToRay (touch2.position);
-			
-			if (Physics.Raycast (ray1, out hit1)) {
-				gameObjectName1 = hit1.collider.gameObject.name;
-			}
-			
-			if (Physics.Raycast (ray2, out hit2)) {
-				gameObjectName2 = hit2.collider.gameObject.name;
-			}
-			
-			// Check which gameObject was hit and apply scaling
-			if (gameObjectName1.Equals("EmpireStateBuilding") || 
-			    gameObjectName2.Equals("EmpireStateBuilding")) {
-				this.ScaleGameObject(this.gameObject.transform);
-			}
-		}
+                if (Physics.Raycast(ray, out hit))
+                {
+                    this.RotateGameObject(hit.collider.gameObject.transform);
+                }
+            } else if (Input.touchCount == 2 && 
+                Input.GetTouch(0).phase == TouchPhase.Moved && 
+                Input.GetTouch(1).phase == TouchPhase.Moved)
+            {
+                this.ScaleGameObject(this.gameObject.transform);
+            }
+        }
 	}
 	
 	private void RotateGameObject(Transform buildingTransform) 
@@ -80,20 +57,20 @@ public class EmpireStateBuilding_Demo: MonoBehaviour {
 	
 	private void ScaleGameObject(Transform buildingTransform)
 	{
-		curDist = Input.GetTouch (0).position - Input.GetTouch (1).position; 
-		prevDist = ((Input.GetTouch (0).position - Input.GetTouch (0).deltaPosition) - (Input.GetTouch (1).position - Input.GetTouch (1).deltaPosition)); 
+		curDist = Input.GetTouch (0).position - Input.GetTouch(1).position; 
+		prevDist = ((Input.GetTouch (0).position - Input.GetTouch(0).deltaPosition) - (Input.GetTouch (1).position - Input.GetTouch (1).deltaPosition)); 
 		touchDelta = curDist.magnitude - prevDist.magnitude;
 		
 		if (touchDelta < 0) {
 			float oldScale = buildingTransform.localScale.x;
 			float newScale = oldScale / 1.1f;
-			if(newScale > 0.009) {
+			if(newScale > 0.001) {
 				buildingTransform.localScale = new Vector3 (newScale, newScale, newScale);
 			}
 		} else {
 			float oldScale = buildingTransform.localScale.x;
 			float newScale = oldScale * 1.1f;
-			if(newScale < 0.02) {
+			if(newScale < 0.03) {
 				buildingTransform.localScale = new Vector3 (newScale, newScale, newScale);
 			}
 		}

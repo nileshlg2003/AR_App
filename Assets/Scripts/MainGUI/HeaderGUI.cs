@@ -21,10 +21,8 @@ public class HeaderGUI : MonoBehaviour
     public Texture Image1;
     public Texture Image2;
     public Texture Image3;
-    
-		public GameObject mEmpireStateBuilding;
-		public GameObject mVegasStrip;
-		
+	public GameObject mEmpireStateBuilding;
+	public GameObject mVegasStrip;
     private IList<Texture> mImages;
     
     // Screen params
@@ -98,6 +96,7 @@ public class HeaderGUI : MonoBehaviour
     {
         InitButtonsGUI();
         InitSlider();
+        Reset();
     }
 
     void OnGUI()
@@ -137,10 +136,10 @@ public class HeaderGUI : MonoBehaviour
             switch (selectedFunction)
             {
                 case ButtonFunction.VegasModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.VegasModel]);
+                    SetupVegasModel();
                     break;
                 case ButtonFunction.EmpireModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.EmpireModel]);
+                    SetupEmpireStateModel();
                     break;
                 case ButtonFunction.EmpireImageSlider:
                     //Debug.Log (mButtonFunctions [ButtonFunction.EmpireImageSlider]);
@@ -268,7 +267,18 @@ public class HeaderGUI : MonoBehaviour
     {		
         // Hide all elements here
         mShowImageSlider = false;
+        mVegasStrip.SetActive(false);
+        mEmpireStateBuilding.SetActive(false);
     }
     
+    void SetupVegasModel()
+    {
+        mVegasStrip.SetActive(true);
+    }
+    
+    void SetupEmpireStateModel()
+    {
+        mEmpireStateBuilding.SetActive(true);     
+    }
     #endregion
 }

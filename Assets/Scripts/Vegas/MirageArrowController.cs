@@ -21,7 +21,7 @@ public class MirageArrowController : MonoBehaviour
 				mDefaultPosition = mMirageArrow.transform.position;
 				mDefaultRotation = mMirageArrow.transform.rotation;
 				mDefaultScale = mMirageArrow.transform.localScale;
-				mMirageArrow.SetActive (false);
+				//mMirageArrow.SetActive (false);
 		}
 	
 		void Update ()

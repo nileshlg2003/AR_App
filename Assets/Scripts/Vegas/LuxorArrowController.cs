@@ -21,7 +21,7 @@ public class LuxorArrowController : MonoBehaviour
 				mDefaultPosition = mLuxorArrow.transform.position;
 				mDefaultRotation = mLuxorArrow.transform.rotation;
 				mDefaultScale = mLuxorArrow.transform.localScale;
-				mLuxorArrow.SetActive (false);
+				//mLuxorArrow.SetActive (false);
 		}
 	
 		void Update ()

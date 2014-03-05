@@ -21,7 +21,7 @@ public class MirageTextController : MonoBehaviour
 				mDefaultPosition = mMirageText.transform.position;
 				mDefaultRotation = mMirageText.transform.rotation;
 				mDefaultScale = mMirageText.transform.localScale;
-				mMirageText.SetActive (false);
+				//mMirageText.SetActive (false);
 		}
 	
 		void Update ()
