@@ -131,14 +131,7 @@ public class HeaderGUI : MonoBehaviour
         ImageSliderGUI();
         InfoBoxGUI();
 
-        if (showPanoramic) {
-            var buttonX = (Screen.width - 100) / 2.0f;
-            var buttonY = (Screen.height - 50) / 2.0f;
-            
-            if (GUI.Button (new Rect (buttonX, buttonY, 100, 50), "Back")) {
-                HidePanoramic();
-            }
-        }
+        PanoramicGUI();
     }
 
     #endregion
@@ -256,20 +249,24 @@ public class HeaderGUI : MonoBehaviour
         if (mShowImageSlider)
         {
             GUI.DrawTexture(mImageSliderBox.rect, mTexture);
-            GUI.DrawTexture(mImageSliderBox.rect, mImages[mSelectedImageIndex]);
+            GUI.DrawTexture(mImageSliderBox.rect, mImages [mSelectedImageIndex]);
             if (GUI.Button(mPrevButton.rect, "Prev"))
             {
-                if (mSelectedImageIndex > 0) {
+                if (mSelectedImageIndex > 0)
+                {
                     mSelectedImageIndex--;
-                } else {
-                    mSelectedImageIndex = mImages.Count-1;
+                } else
+                {
+                    mSelectedImageIndex = mImages.Count - 1;
                 }
             }
             if (GUI.Button(mNextButton.rect, "Next"))
             {
-                if (mSelectedImageIndex < mImages.Count-1) {
+                if (mSelectedImageIndex < mImages.Count - 1)
+                {
                     mSelectedImageIndex++;
-                } else {
+                } else
+                {
                     mSelectedImageIndex = 0;
                 }
             }
@@ -345,6 +342,23 @@ public class HeaderGUI : MonoBehaviour
     
     #endregion
 
+    #region Panoramic Methods
+    
+    void PanoramicGUI()
+    {
+        if (showPanoramic)
+        {
+            var buttonX = (Screen.width - 100) / 2.0f;
+            var buttonY = (Screen.height - 50) / 2.0f;
+            if (GUI.Button(new Rect(buttonX, buttonY, 100, 50), "Back"))
+            {
+                HidePanoramic();
+            }
+        }
+    }
+    
+    #endregion
+
     #region General Methods
     
     void Reset()
@@ -366,7 +380,8 @@ public class HeaderGUI : MonoBehaviour
         mEmpireStateBuilding.SetActive(true);     
     }
     
-    void ShowPanoramic() {
+    void ShowPanoramic()
+    {
         showPanoramic = true;
         
         RenderSettings.skybox = panoramicMaterial;
@@ -375,7 +390,8 @@ public class HeaderGUI : MonoBehaviour
         ARCamera.enabled = false;
     }
     
-    void HidePanoramic() {
+    void HidePanoramic()
+    {
         showPanoramic = false;
         
         panoCamera.enabled = false;
