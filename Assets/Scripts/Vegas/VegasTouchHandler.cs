@@ -34,7 +34,7 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 		// Use this for initialization
 		void Start ()
 		{			
-				_imageTarget = GameObject.Find ("VegasStripTarget");
+				_imageTarget = GameObject.Find("VegasStripTarget");
 				if (_imageTarget != null) {
 						_targetPlane = new Plane (_imageTarget.transform.up, _imageTarget.transform.position);
 						_mTrackableBehaviour = _imageTarget.GetComponent<TrackableBehaviour> ();
@@ -45,7 +45,7 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 						}
 				}
 
-				_vegasObject = GameObject.Find ("Vegas");
+				_vegasObject = GameObject.Find("VegasContainer");
 				if (_vegasObject != null) {
 						_defaultVegasPosition = _vegasObject.transform.position;
 						_defaultVegasRotation = _vegasObject.transform.rotation;
@@ -57,19 +57,25 @@ public class VegasTouchHandler : MonoBehaviour, ITrackableEventHandler
 		// Update is called once per frame
 		void Update ()
 		{
-				// Check that the image target has been set, the model exists
-				if (_imageTarget != null && _vegasObject != null) {
-						if (Input.touchCount == 1) {
-								// We are moving the object on the plane
-								DragObject (Input.GetTouch (0));
-								_isVegasAtOrigin = false;
-						} else if (Input.touchCount == 2 &&
-								(Input.GetTouch (0).phase == TouchPhase.Moved || Input.GetTouch (1).phase == TouchPhase.Moved)) {
-								// We are pinch zooming
-								PinchZoomObject (Input.GetTouch (0), Input.GetTouch (1));
-								_isVegasAtDefaultScale = false;
-						}
-				}
+            if (this.gameObject.activeSelf)
+            {
+                // Check that the image target has been set, the model exists
+                if (_imageTarget != null && _vegasObject != null)
+                {
+                    if (Input.touchCount == 1)
+                    {
+                        // We are moving the object on the plane
+                        DragObject(Input.GetTouch(0));
+                        _isVegasAtOrigin = false;
+                    } else if (Input.touchCount == 2 &&
+                        (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(1).phase == TouchPhase.Moved))
+                    {
+                        // We are pinch zooming
+                        PinchZoomObject(Input.GetTouch(0), Input.GetTouch(1));
+                        _isVegasAtDefaultScale = false;
+                    }
+                }
+            }
 		}
 
 	#endregion

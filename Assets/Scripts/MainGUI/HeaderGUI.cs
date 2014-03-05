@@ -22,12 +22,16 @@ public class HeaderGUI : MonoBehaviour
     public Texture Image1;
     public Texture Image2;
     public Texture Image3;
-    
     public GameObject mEmpireStateBuilding;
     public GameObject mVegasStrip;
-		
     private IList<Texture> mImages;
-    
+
+    // Panoramic Related
+    public Camera panoCamera;
+    public Camera ARCamera;
+    public Material panoramicMaterial;
+    public bool showPanoramic = false;
+
     // Screen params
     private int w;
     private int h;
@@ -111,9 +115,12 @@ public class HeaderGUI : MonoBehaviour
 
     void Start()
     {
+        panoCamera.enabled = showPanoramic;
+
         InitButtonsGUI();
         InitSlider();
         InitInfoBox();
+        Reset();
     }
 
     void OnGUI()
@@ -123,6 +130,15 @@ public class HeaderGUI : MonoBehaviour
         ButtonsGUI();
         ImageSliderGUI();
         InfoBoxGUI();
+
+        if (showPanoramic) {
+            var buttonX = (Screen.width - 100) / 2.0f;
+            var buttonY = (Screen.height - 50) / 2.0f;
+            
+            if (GUI.Button (new Rect (buttonX, buttonY, 100, 50), "Back")) {
+                HidePanoramic();
+            }
+        }
     }
 
     #endregion
@@ -154,10 +170,10 @@ public class HeaderGUI : MonoBehaviour
             switch (selectedFunction)
             {
                 case ButtonFunction.VegasModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.VegasModel]);
+                    SetupVegasModel();
                     break;
                 case ButtonFunction.EmpireModel:
-                    //Debug.Log (mButtonFunctions [ButtonFunction.EmpireModel]);
+                    SetupEmpireStateModel();
                     break;
                 case ButtonFunction.EmpireImageSlider:
                     //Debug.Log (mButtonFunctions [ButtonFunction.EmpireImageSlider]);
@@ -240,20 +256,20 @@ public class HeaderGUI : MonoBehaviour
         if (mShowImageSlider)
         {
             GUI.DrawTexture(mImageSliderBox.rect, mTexture);
-            GUI.DrawTexture(mImageSliderBox.rect, mImages [mSelectedImageIndex]);
+            GUI.DrawTexture(mImageSliderBox.rect, mImages[mSelectedImageIndex]);
             if (GUI.Button(mPrevButton.rect, "Prev"))
             {
-                mSelectedImageIndex--;
-                if (mSelectedImageIndex < 0)
-                {
-                    mSelectedImageIndex = mImages.Count - 1;
+                if (mSelectedImageIndex > 0) {
+                    mSelectedImageIndex--;
+                } else {
+                    mSelectedImageIndex = mImages.Count-1;
                 }
             }
             if (GUI.Button(mNextButton.rect, "Next"))
             {
-                mSelectedImageIndex++;
-                if (mSelectedImageIndex > mImages.Count - 1)
-                {
+                if (mSelectedImageIndex < mImages.Count-1) {
+                    mSelectedImageIndex++;
+                } else {
                     mSelectedImageIndex = 0;
                 }
             }
@@ -336,8 +352,36 @@ public class HeaderGUI : MonoBehaviour
         // Hide all elements here
         mShowImageSlider = false;
         mShowInfoBox = false;
+        mVegasStrip.SetActive(false);
+        mEmpireStateBuilding.SetActive(false);
     }
     
+    void SetupVegasModel()
+    {
+        mVegasStrip.SetActive(true);
+    }
+    
+    void SetupEmpireStateModel()
+    {
+        mEmpireStateBuilding.SetActive(true);     
+    }
+    
+    void ShowPanoramic() {
+        showPanoramic = true;
+        
+        RenderSettings.skybox = panoramicMaterial;
+        
+        panoCamera.enabled = true;
+        ARCamera.enabled = false;
+    }
+    
+    void HidePanoramic() {
+        showPanoramic = false;
+        
+        panoCamera.enabled = false;
+        ARCamera.enabled = true;
+    }
+
     #endregion
 }
 

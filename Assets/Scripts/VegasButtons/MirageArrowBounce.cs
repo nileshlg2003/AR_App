@@ -26,7 +26,8 @@ public class MirageArrowBounce : MonoBehaviour
 				mDefaultScale = mArrow.transform.localScale;
 		
 				InitialiseBounceTable ();
-				Reset ();
+                StartBounce();
+        //Reset ();
 
 		}
 	
@@ -50,8 +51,8 @@ public class MirageArrowBounce : MonoBehaviour
 //				mArrow.transform.position = mDefaultPosition;
 //				mArrow.transform.rotation = mDefaultRotation;
 //				mArrow.transform.localScale = mDefaultScale;
-				mArrow.SetActive (false);
-				iTween.Stop (mArrow);
+				//mArrow.SetActive (false);
+				//iTween.Stop (mArrow);
 		}
 	
 	#endregion
@@ -63,7 +64,7 @@ public class MirageArrowBounce : MonoBehaviour
 		{
 				//yield return new WaitForSeconds (0.3f);
 				Vector3 point = mDefaultPosition;
-				point.y += 75;
+				point.y += 40;
 				mBounceTable.Add ("position", point);
 				mBounceTable.Add ("time", 0.75);
 				mBounceTable.Add ("looptype", iTween.LoopType.pingPong);
