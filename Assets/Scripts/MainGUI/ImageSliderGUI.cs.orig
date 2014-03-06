@@ -5,6 +5,7 @@ using System;
 
 public class ImageSliderGUI : MonoBehaviour
 {
+<<<<<<< HEAD
     private enum ButtonType
     {
         Previous = 0,
@@ -14,6 +15,9 @@ public class ImageSliderGUI : MonoBehaviour
     private const float BUTTON_WIDTH_SCALE = 0.05f;
     
     public GUISkin ImageSliderSkin;
+=======
+    public GUISkin GUISkin;
+>>>>>>> 630443531a97703ad4f3864fd2bed8b8bf39ec35
     public Texture SliderBackground;
     public Texture PrevTexture;
     public Texture NextTexture;
@@ -89,7 +93,7 @@ public class ImageSliderGUI : MonoBehaviour
     // Update is called once per frame
     void OnGUI()
     {
-        GUI.skin = ImageSliderSkin;
+        GUI.skin = GUISkin;
         GUI.depth = _Depth;
         
         if (ShowImageSlider)

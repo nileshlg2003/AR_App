@@ -7,9 +7,6 @@ using System;
 
 public class ButtonsGUI : MonoBehaviour
 {
-    public const float BUTTON_WIDTH_SCALE = 0.15f;
-    public const float BUTTON_HEIGHT_SCALE = 0.02f;
-
     public enum ButtonFunction
     {
         VegasModel = 1,
@@ -20,6 +17,10 @@ public class ButtonsGUI : MonoBehaviour
     }
 
     #region Fields
+    
+    // Constants
+    private const float BUTTON_WIDTH_SCALE = 0.15f;
+    private const float BUTTON_HEIGHT_SCALE = 0.02f;
 
     // Public properties
     public GUISkin GUISkin;
@@ -47,7 +48,8 @@ public class ButtonsGUI : MonoBehaviour
     private float _BoxDeltaHeight;
     private float _ButtonDeltaHeight;
     private float _BounceOffset;
-    
+    private Vector2 _BoxStart;
+    private Vector2 _BoxEnd;
     
     // GUI state props
     private ButtonFunction _SelectedFunction;
@@ -116,24 +118,35 @@ public class ButtonsGUI : MonoBehaviour
     {
         float midPoint = _W / 2;
         float betweenButtons = (_NumButtons - 1) * _ButtonOffset;
+        
         float boxLeftRightPadding = _BoxPadding.left + _BoxPadding.right;
         float boxTopBottomPadding = _BoxPadding.top + _BoxPadding.top;
+        
         float totalButtonWidth = _NumButtons * _ButtonWidth;
         float totalBoxWidth = totalButtonWidth + boxLeftRightPadding + betweenButtons;
         float totalBoxHeight = _ButtonHeight + boxTopBottomPadding;
+        
         float boxLeftPos = midPoint - (totalBoxWidth / 2);
         float boxTopPos = _TopOffset;
-        _BoxDeltaHeight = _TopOffset + totalBoxHeight;
-        _TopBarBox = new LTRect(new Rect(boxLeftPos, boxTopPos - _BoxDeltaHeight, totalBoxWidth, totalBoxHeight));
+        
+        _BoxStart = new Vector2(boxLeftPos, -1 * totalBoxHeight);
+        _BoxEnd = new Vector2(boxLeftPos, boxTopPos);
+        _TopBarBox = new LTRect(new Rect(_BoxStart.x, _BoxStart.y, totalBoxWidth, totalBoxHeight));
         
         float buttonTop = boxTopPos + _BoxPadding.top;
-        _ButtonDeltaHeight = buttonTop + _ButtonHeight;
+        
         int count = 0;
         foreach (var kvp in _ButtonFunctions)
         {
             float buttonLeft = boxLeftPos + _BoxPadding.left + count * (_ButtonWidth + _ButtonOffset);
-            LTRect rect = new LTRect(new Rect(buttonLeft, buttonTop - _ButtonDeltaHeight, _ButtonWidth, _ButtonHeight));
-            _ButtonList.Add(new CustomButton(kvp.Key, kvp.Value, rect));
+            
+            Vector2 start = new Vector2(buttonLeft, -1 * _ButtonHeight);
+            Vector2 end = new Vector2(buttonLeft, buttonTop);
+            Vector2 bounceEnd = new Vector2(buttonLeft, buttonTop - _BounceOffset);
+            
+            LTRect rect = new LTRect(new Rect(start.x, start.y, _ButtonWidth, _ButtonHeight));
+            
+            _ButtonList.Add(new CustomButton(kvp.Key, kvp.Value, rect, start, end, bounceEnd));
             count++;
         }
         
@@ -179,7 +192,7 @@ public class ButtonsGUI : MonoBehaviour
         Action completeExpandButtons = () => {
             _AnimationRunning = false; };
     
-        LeanTween.move(_TopBarBox, new Vector2(_TopBarBox.rect.x, _TopBarBox.rect.y + _BoxDeltaHeight), 1.0f).setEase(LeanTweenType.easeOutExpo).setDelay(0.5f);
+        LeanTween.move(_TopBarBox, _BoxEnd, 1.0f).setEase(LeanTweenType.easeOutExpo).setDelay(0.5f);
         
         int count = 0;
         foreach (var button in _ButtonList)
@@ -188,11 +201,11 @@ public class ButtonsGUI : MonoBehaviour
             if (count == _NumButtons - 1)
             {
                 // The last button must signal animation finished
-                LeanTween.move(button.mRect, new Vector2(button.mRect.rect.x, button.mRect.rect.y + _ButtonDeltaHeight), 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay)
+                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay)
                     .setOnComplete(completeExpandButtons);
             } else
             {
-                LeanTween.move(button.mRect, new Vector2(button.mRect.rect.x, button.mRect.rect.y + _ButtonDeltaHeight), 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay);
+                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay);
             }
             
             count++;
@@ -201,11 +214,11 @@ public class ButtonsGUI : MonoBehaviour
     
     void BounceButton(ButtonFunction selectedFunction)
     {
-        LTRect buttonRect = _ButtonList.Where(b => b.mFunction == selectedFunction).Select(b => b.mRect).First();
-        if (!LeanTween.isTweening(buttonRect))
+        CustomButton button = _ButtonList.Where(b => b.mFunction == selectedFunction).First();
+        if (!LeanTween.isTweening(button.mRect))
         {
-            LeanTween.move(buttonRect, new Vector2(buttonRect.x, buttonRect.y - _ButtonOffset), 0.1f).setEase(LeanTweenType.easeOutCubic)
-                .setOnComplete(() => LeanTween.move(buttonRect, new Vector2(buttonRect.x, buttonRect.y + _ButtonOffset), 0.5f).setEase(LeanTweenType.easeOutBounce));
+            LeanTween.move(button.mRect, button.mBounceEnd, 0.05f).setEase(LeanTweenType.easeOutCubic)
+                .setOnComplete(() => LeanTween.move(button.mRect, button.mEnd, 0.07f).setEase(LeanTweenType.easeOutBounce));
         }
     }
 
@@ -256,12 +269,21 @@ class CustomButton
     
     public LTRect mRect { get; set; }
     
+    public Vector2 mStart { get; set; }
+    
+    public Vector2 mEnd { get; set; }
+    
+    public Vector2 mBounceEnd { get; set; }
+    
     public bool mTweening = false;
     
-    public CustomButton(ButtonsGUI.ButtonFunction function, string text, LTRect rect)
+    public CustomButton(ButtonsGUI.ButtonFunction function, string text, LTRect rect, Vector2 start, Vector2 end, Vector2 bounceEnd)
     {
         mFunction = function;
         mText = text;
         mRect = rect;
+        mStart = start;
+        mEnd = end;
+        mBounceEnd = bounceEnd;
     }
 }
