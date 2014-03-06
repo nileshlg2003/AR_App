@@ -13,9 +13,8 @@ public class InfoBoxGUI : MonoBehaviour
     private int _H;
     
     private int _Depth;
-    
+
     // Info Box GUI props
-    private LTRect _ImageSliderBox;
     private float _InfoBoxWidth;
     private float _InfoBoxHeight;
     private LTRect _InfoBoxBox;
@@ -51,9 +50,8 @@ public class InfoBoxGUI : MonoBehaviour
     
         if (ShowInfoBox)
         {
-            GUILayout.BeginArea(_InfoBoxBox.rect, GUI.skin.box);
-            _InfoBoxScrollPosition = GUILayout.BeginScrollView(_InfoBoxScrollPosition, GUILayout.Width(_InfoBoxWidth), GUILayout.Height(_InfoBoxHeight));
-            GUILayout.BeginScrollView(_InfoBoxScrollPosition);
+            GUILayout.BeginArea(_InfoBoxBox.rect);
+            _InfoBoxScrollPosition = GUILayout.BeginScrollView(_InfoBoxScrollPosition, GUI.skin.box, GUILayout.Width(_InfoBoxWidth), GUILayout.Height(_InfoBoxHeight));
 
             GUILayout.Label(OBLogo);
             GUILayout.Label("We passionately believe in constantly striving for doing things a better way.\nWe do this by challenging firmly held beliefs and conventions in ourselves and everyone around us every day. \n\n", _LargeTextStyle);
