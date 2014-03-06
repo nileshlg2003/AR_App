@@ -22,7 +22,7 @@ public class ButtonsGUI : MonoBehaviour
     #region Fields
 
     // Public properties
-    public GUISkin GUISkin;
+    public GUISkin HeaderBarSkin;
     public GameObject EmpireStateBuilding;
     
     public VegasStrip_Handler VegasStripHandler;
@@ -96,7 +96,7 @@ public class ButtonsGUI : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.skin = GUISkin;
+        GUI.skin = HeaderBarSkin;
 
         GUI.Box(_TopBarBox.rect, "");
         foreach (var button in _ButtonList)
