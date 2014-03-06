@@ -33,8 +33,8 @@ public class VegasStrip_Handler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount == 1 &&
-            Input.GetTouch(0).phase == TouchPhase.Moved)
+        // Was incorrectly blocking the Began phase which was causing the drag to not get reinitialized correctly (.phase != TouchPhase.Moved)
+        if (Input.touchCount == 1)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);             
             RaycastHit hit;
@@ -44,9 +44,7 @@ public class VegasStrip_Handler : MonoBehaviour
                 // We are moving the object on the plane
                 DragObject(Input.GetTouch(0));
             }
-        } else if (Input.touchCount == 2 && 
-            Input.GetTouch(0).phase == TouchPhase.Moved && 
-            Input.GetTouch(1).phase == TouchPhase.Moved)
+        } else if (Input.touchCount == 2)
         {
             // We are pinch zooming
             PinchZoomObject(Input.GetTouch(0), Input.GetTouch(1));

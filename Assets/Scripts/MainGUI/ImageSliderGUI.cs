@@ -75,9 +75,11 @@ public class ImageSliderGUI : MonoBehaviour
         // TODO: Hard code or variable?
         float temp = _W < _H ? _W : _H;
         _ImageSliderWidth = temp * 0.8f;
-        _ImageSliderHeight = temp * 0.6f;
+        _ImageSliderHeight = temp * 0.7f;
         _SliderButtonOffsetTop = _H * 0.0375f;
         _SliderButtonOffsetBetween = _W * 0.2f;
+        
+        _ButtonBounceOffset = _W * 0.01f;
         
         _SelectedImageIndex = 0;
         
@@ -134,8 +136,6 @@ public class ImageSliderGUI : MonoBehaviour
             Image2,
             Image3
         };
-        
-        _ButtonBounceOffset = _W * 0.005f;
         
         float sliderLeft = (_W / 2) - (_ImageSliderWidth / 2);
         float sliderTop = (_H / 2) - (_ImageSliderHeight / 2);
@@ -234,8 +234,8 @@ public class ImageSliderGUI : MonoBehaviour
     
         if (!LeanTween.isTweening(buttonRect))
         {
-            LeanTween.move(buttonRect, endPosition, 0.05f).setEase(LeanTweenType.easeOutCubic)
-                .setOnComplete(() => LeanTween.move(buttonRect, startPosition, 0.07f).setEase(LeanTweenType.easeInCubic));
+            LeanTween.move(buttonRect, endPosition, 0.1f).setEase(LeanTweenType.easeOutCubic)
+                .setOnComplete(() => LeanTween.move(buttonRect, startPosition, 0.2f).setEase(LeanTweenType.easeOutBack));
         }
     }
     

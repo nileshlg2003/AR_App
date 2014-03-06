@@ -67,10 +67,10 @@ public class ButtonsGUI : MonoBehaviour
     private static IList<CustomButton> _ButtonList = new List<CustomButton>();
     private static Dictionary<ButtonFunction, string> _ButtonFunctions = new Dictionary<ButtonFunction, string>()
     {
-        {ButtonFunction.VegasModel, "Vegas Model"},
-        {ButtonFunction.EmpireModel, "Empire Model"},
-        {ButtonFunction.EmpireImageSlider, "Empire Image Slider"},
-        {ButtonFunction.EmpireInfo, "Empire Info"},
+        {ButtonFunction.VegasModel, "Interactive Map"},
+        {ButtonFunction.EmpireModel, "3D Model"},
+        {ButtonFunction.EmpireImageSlider, "Image Slider"},
+        {ButtonFunction.EmpireInfo, "Info Box"},
         {ButtonFunction.Panoramic, "Panoramic"}
     };
 
@@ -88,8 +88,8 @@ public class ButtonsGUI : MonoBehaviour
         _ButtonWidth = _W * BUTTON_WIDTH_SCALE;
         _ButtonHeight = _H * BUTTON_HEIGHT_SCALE;
         _TopOffset = _H * 0.01f;
-        _ButtonOffset = 0.0f;//_H * 0.005f;
-        _BounceOffset = _H * 0.005f;
+        _ButtonOffset = 0.0f;//_H * 0.005f; // Touching = 0.0f
+        _BounceOffset = _H * 0.007f;
         
         //int padding = Convert.ToInt32(Math.Round(_H * 0.005f, MidpointRounding.AwayFromZero));
         //_BoxPadding = new RectOffset(padding, padding, padding, padding);
@@ -98,6 +98,9 @@ public class ButtonsGUI : MonoBehaviour
         _NumButtons = _ButtonFunctions.Count;
         
         _TempButtonStyle = HeaderSkin.button;
+        
+        int fontSize = Convert.ToInt32(Math.Round(_ButtonHeight / 2, MidpointRounding.AwayFromZero));
+        _TempButtonStyle.fontSize = fontSize;
     }
 
     void Start()
@@ -208,8 +211,9 @@ public class ButtonsGUI : MonoBehaviour
     {
         Action completeExpandButtons = () => {
             _AnimationRunning = false; };
-    
-        LeanTween.move(_TopBarBox, _BoxEnd, 1.0f).setEase(LeanTweenType.easeOutExpo).setDelay(0.5f);
+        
+        float startingDelay = 0.8f;
+        LeanTween.move(_TopBarBox, _BoxEnd, 1.0f).setEase(LeanTweenType.easeOutExpo).setDelay(startingDelay);
         
         int count = 0;
         foreach (var button in _ButtonList)
@@ -218,11 +222,11 @@ public class ButtonsGUI : MonoBehaviour
             if (count == _NumButtons - 1)
             {
                 // The last button must signal animation finished
-                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay)
+                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(startingDelay + extraDelay)
                     .setOnComplete(completeExpandButtons);
             } else
             {
-                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(0.5f + extraDelay);
+                LeanTween.move(button.mRect, button.mEnd, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(startingDelay + extraDelay);
             }
             
             count++;
@@ -234,8 +238,8 @@ public class ButtonsGUI : MonoBehaviour
         CustomButton button = _ButtonList.Where(b => b.mFunction == selectedFunction).First();
         if (!LeanTween.isTweening(button.mRect))
         {
-            LeanTween.move(button.mRect, button.mBounceEnd, 0.05f).setEase(LeanTweenType.easeOutCubic)
-                .setOnComplete(() => LeanTween.move(button.mRect, button.mEnd, 0.07f).setEase(LeanTweenType.easeOutBounce));
+            LeanTween.move(button.mRect, button.mBounceEnd, 0.08f).setEase(LeanTweenType.easeOutCubic)
+                .setOnComplete(() => LeanTween.move(button.mRect, button.mEnd, 0.4f).setEase(LeanTweenType.easeOutBounce));
         }
     }
 
