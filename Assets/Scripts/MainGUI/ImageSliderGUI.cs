@@ -5,7 +5,7 @@ using System;
 
 public class ImageSliderGUI : MonoBehaviour
 {
-    public GUISkin ImageSliderSkin;
+    public GUISkin GUISkin;
     public Texture SliderBackground;
     public Texture Image1;
     public Texture Image2;
@@ -69,7 +69,7 @@ public class ImageSliderGUI : MonoBehaviour
     // Update is called once per frame
     void OnGUI()
     {
-        GUI.skin = ImageSliderSkin;
+        GUI.skin = GUISkin;
         GUI.depth = _Depth;
         
         if (ShowImageSlider)
