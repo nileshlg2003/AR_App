@@ -57,28 +57,28 @@ public class InfoBoxGUI : MonoBehaviour
             _InfoBoxScrollPosition = GUILayout.BeginScrollView(_InfoBoxScrollPosition, GUILayout.Width(_InfoBoxWidth), GUILayout.Height(_InfoBoxHeight));
 
             GUILayout.Label(OBLogo);
-            GUILayout.Label("\nWe passionately believe in constantly striving for doing things a better way.\nWe do this by challenging firmly held beliefs and conventions in ourselves and everyone around us every day. \n\n", _LargeTextStyle);
-            GUILayout.Label("What we do \n\n", _BoldHeaderStyle);
-            GUILayout.Label("Real Estate software solutions, soup to nuts. Identification of opportunities to increase revenue, decrease cost and reduce risk \nthrough to supporting the resulting systems, processes and people in your organization.\n\n"
-                            + "Our experienced team is ready to bring their knowledge to your organization, to help you run a successful project, \nfrom start to finish. We thrive on getting involved from the initial business case, working with you and the business to develop the \napproach and objectives for a project. \n\n"
-                            + "We understand real estate, we bring industry knowledge, systems thinking, and innovative technological approaches to the table. \nWe speak to the technical detail required by your IT Department, and just as easily understand the business challenges and \nlanguage of the rest of the people in your organization. Bridging these worlds, is what Open Box is about.  \nDoing so with the great technology in a fast, innovative and efficient way. We understand your business, your pain points,  \nand will be your partner through the \n\n",_NormalTextStyle);
-            GUILayout.Label("We Know Commercial Real Estate: \n\n", _BoldHeaderStyle);
-            GUILayout.Label("For the past 12 years we have been working with some of the leading names in the global commercial real estate industry. \nAs a result we have been privileged \nto have been involved in defining industry best practice for not only the use of technology, but also business processes.\n"
-                            + "We understand the difference between the different sectors, whether your commercial property is retail, office, residential or \nindustrial. We understand the industry cycles, `as well as the past, present and likely future challenges and opportunities \nrelated to each of these."
-                            + "With clients around the world we have a unique global perspective. \n"
-                            + "We speak your business language - one that is highly specific to the real estate industry. \n"
-                            + "All of this means that we immediately understand where you are today, and can partner in assisting you to get to where you  \nwant to be in the future. \n\n",_NormalTextStyle);
-            GUILayout.Label("We believe that if you get great people together in the right environment and set them a challenge, \ninspirational things will result.  \n\n", _LargeTextStyle);
-            GUILayout.Label("Contact Us  \n\n", _BoldHeaderStyle);
+            GUILayout.Label("\nWe passionately believe in constantly striving for doing things a better way. \nWe do this by challenging firmly held beliefs and conventions in ourselves and everyone around us every day. \n", _LargeTextStyle);
+            GUILayout.Label("What we do \n", _BoldHeaderStyle);
+            GUILayout.Label("Real Estate software solutions, soup to nuts. Identification of opportunities to increase revenue, decrease cost and reduce \nrisk through to supporting the resulting systems, processes and people in your organization.\n\n"
+                            + "Our experienced team is ready to bring their knowledge to your organization, to help you run a successful project, from \nstart to finish. We thrive on getting involved from the initial business case, working with you and the business to \ndevelop the approach and objectives for a project. \n\n"
+                            + "We understand real estate, we bring industry knowledge, systems thinking, and innovative technological approaches to \nthe table. We speak to the technical detail required by your IT Department, and just as easily understand the business \nchallenges and language of the rest of the people in your organization. Bridging these worlds, is what Open Box is about. \nDoing so with the great technology in a fast, innovative and efficient way. We understand your business, your pain points, \nand will be your partner through the process. \n",_NormalTextStyle);
+            GUILayout.Label("We Know Commercial Real Estate: \n", _BoldHeaderStyle);
+            GUILayout.Label("For the past 12 years we have been working with some of the leading names in the global commercial real estate \nindustry. As a result we have been privileged to have been involved in defining industry best practice for not only the \nuse of technology, but also business processes.\n\n"
+                            + "We understand the difference between the different sectors, whether your commercial property is retail, office, \nresidential or industrial. We understand the industry cycles, `as well as the past, present and likely future challenges \nand opportunities related to each of these."
+                            + "With clients around the world we have a unique global perspective.\n"
+                            + "We speak your business language - one that is highly specific to the real estate industry. \n\n"
+                            + "All of this means that we immediately understand where you are today, and can partner in assisting you to get to \nwhere you want to be in the future. \n",_NormalTextStyle);
+            GUILayout.Label("We believe that if you get great people together in the right environment and set them a challenge, \ninspirational things will result.  \n", _LargeTextStyle);
+            GUILayout.Label("How we help you", _BoldHeaderStyle);
+            GUILayout.Label("By meeting your need for real-world, experienced resources, our team works with your business users and technical \n"
+                            + "teams to deliver the quality of work you’d expect of yourselves.", _NormalTextStyle);
+            GUILayout.Label("Through our focus on what we do we are able to create efficiencies that we are able to pass onto you. \nThe opportunity therefore exists for you to either increase your margins or pass on \nassociated savings to your customers, making you more competitive in the marketplace.\n", _NormalTextStyle);
+            GUILayout.Label("A similar business culture, language and time zones play a major role in being able to successfully \ncommunicate between all stakeholders on a project. Grouping this with our rapid decision-making skills, \nrapid builds to demonstrate progress and strict delivery methodology means we have jointly created a low-risk environment.\n", _NormalTextStyle);
+            GUILayout.Label("If you have an ethos that pivots around delivering work on time — not just any work, but work of the \nhighest standard — then we’ve got more in common than just business culture and language. \nWe welcome the opportunity to work with you and your management team to discover how we can support your revenue and \ncost objectives through this year and beyond.\n", _NormalTextStyle);
 
-            GUILayout.Label("info@openboxsoftware.com | www.openboxsoftware.com | +27 32 713 9300",_NormalTextStyle);
-            GUILayout.BeginHorizontal();
-
-            GUILayout.Button("info@openboxsoftware.com", GUILayout.Width(200), GUILayout.Height(30));
-            GUILayout.Button("www.openboxsoftware.com", GUILayout.Width(200), GUILayout.Height(30));
-            //GUILayout.Label(" | +27 32 713 9300", _NormalTextStyle);
-
-            GUILayout.EndHorizontal();
+            if (GUILayout.Button("Contact Us", GUILayout.Width(200), GUILayout.Height(35))) {
+                Application.OpenURL("http://www.openboxsoftware.com/content/contactus.aspx");
+            }
 
             GUILayout.EndScrollView();
             GUILayout.EndArea();
@@ -97,7 +97,7 @@ public class InfoBoxGUI : MonoBehaviour
 
         // Set GUIStyles
         _NormalTextStyle = new GUIStyle();
-        _NormalTextStyle.fontSize = 20;
+        _NormalTextStyle.fontSize = 21;
 
         _BoldHeaderStyle = new GUIStyle();
         _BoldHeaderStyle.fontSize = 21;
