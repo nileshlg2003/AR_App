@@ -21,6 +21,9 @@ public class InfoBoxGUI : MonoBehaviour
     private Vector2 _InfoBoxScrollPosition;
     private float _InfoBoxDeltaHeight;
     
+    private Vector2 _InfoBoxStart;
+    private Vector2 _InfoBoxEnd;
+    
     private bool _AnimationRunning = true;
     
     private string _TextToDisplay;
@@ -66,8 +69,11 @@ public class InfoBoxGUI : MonoBehaviour
     {
         float infoBoxLeft = (_W / 2) - (_InfoBoxWidth / 2);
         float infoBoxTop = (_H / 2) - (_InfoBoxHeight / 2);
-        _InfoBoxDeltaHeight = _W - infoBoxTop;
-        _InfoBoxBox = new LTRect(new Rect(infoBoxLeft, infoBoxTop + _InfoBoxDeltaHeight, _InfoBoxWidth, _InfoBoxHeight));
+        
+        _InfoBoxStart = new Vector2(infoBoxLeft, _H);
+        _InfoBoxEnd = new Vector2(infoBoxLeft, infoBoxTop);
+        
+        _InfoBoxBox = new LTRect(new Rect(_InfoBoxStart.x, _InfoBoxStart.y, _InfoBoxWidth, _InfoBoxHeight));
     }
     
     public void Show()
@@ -81,7 +87,7 @@ public class InfoBoxGUI : MonoBehaviour
         
         if (!LeanTween.isTweening(_InfoBoxBox))
         {
-            LeanTween.move(_InfoBoxBox, new Vector2(_InfoBoxBox.rect.x, _InfoBoxBox.y - _InfoBoxDeltaHeight), 0.6f).setEase(LeanTweenType.easeOutBack)
+            LeanTween.move(_InfoBoxBox, _InfoBoxEnd, 0.35f).setEase(LeanTweenType.easeOutCirc)
                 .setOnComplete(completeShowInfoBox);
         }
     }
@@ -90,18 +96,21 @@ public class InfoBoxGUI : MonoBehaviour
     {
         _Depth = 2;
         
-        // TODO: Better logic around animation timings etc
-        if (!LeanTween.isTweening(_InfoBoxBox))
-        {
-            Action completeHideInfoBox = () => 
-            {
-                _AnimationRunning = false;
-                ShowInfoBox = false;
-            };
-            
-            LeanTween.move(_InfoBoxBox, new Vector2(_InfoBoxBox.rect.x, _InfoBoxBox.y + _InfoBoxDeltaHeight), 0.4f).setEase(LeanTweenType.easeInCubic)
-                .setOnComplete(completeHideInfoBox);
-        }
+//        // TODO: Better logic around animation timings etc
+//        if (!LeanTween.isTweening(_InfoBoxBox))
+//        {
+//            Action completeHideInfoBox = () => 
+//            {
+//                _AnimationRunning = false;
+//                ShowInfoBox = false;
+//            };
+//            
+//            LeanTween.move(_InfoBoxBox, _InfoBoxStart, 0.4f).setEase(LeanTweenType.easeInCubic)
+//                .setOnComplete(completeHideInfoBox);
+//        }
+        
+        _InfoBoxBox.y = _InfoBoxStart.y;
+        ShowInfoBox = false;
     }
 
     string CreateTextToDisplay()
