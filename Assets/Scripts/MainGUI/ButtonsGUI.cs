@@ -20,10 +20,10 @@ public class ButtonsGUI : MonoBehaviour
     
     // Constants
     private const float BUTTON_WIDTH_SCALE = 0.15f;
-    private const float BUTTON_HEIGHT_SCALE = 0.02f;
+    private const float BUTTON_HEIGHT_SCALE = 0.03f;
 
     // Public properties
-    public GUISkin GUISkin;
+    public GUISkin HeaderSkin;
     public GameObject EmpireStateBuilding;
     
     public VegasStrip_Handler VegasStripHandler;
@@ -32,6 +32,10 @@ public class ButtonsGUI : MonoBehaviour
     public ImageSliderGUI ImageSliderGUI;
     public PanoramicGUI PanoramicGUI;
     
+    public Texture BoxTexture;
+    public Texture ButtonRightBorderTexture;
+    public Texture ButtonNoRightBorderTexture;
+    public Texture ButtonActiveTexture;
 
     // Screen params
     private int _W;
@@ -54,6 +58,8 @@ public class ButtonsGUI : MonoBehaviour
     // GUI state props
     private ButtonFunction _SelectedFunction;
     private bool _AnimationRunning = true;
+    
+    private GUIStyle _TempButtonStyle;
     
     // Show/Hide bools
     
@@ -82,13 +88,16 @@ public class ButtonsGUI : MonoBehaviour
         _ButtonWidth = _W * BUTTON_WIDTH_SCALE;
         _ButtonHeight = _H * BUTTON_HEIGHT_SCALE;
         _TopOffset = _H * 0.01f;
-        _ButtonOffset = _H * 0.005f;
+        _ButtonOffset = 0.0f;//_H * 0.005f;
         _BounceOffset = _H * 0.005f;
         
-        int padding = Convert.ToInt32(Math.Round(_H * 0.005f, MidpointRounding.AwayFromZero));
-        _BoxPadding = new RectOffset(padding, padding, padding, padding);
+        //int padding = Convert.ToInt32(Math.Round(_H * 0.005f, MidpointRounding.AwayFromZero));
+        //_BoxPadding = new RectOffset(padding, padding, padding, padding);
+        _BoxPadding = new RectOffset(0, 0, 0, 0);
         
         _NumButtons = _ButtonFunctions.Count;
+        
+        _TempButtonStyle = HeaderSkin.button;
     }
 
     void Start()
@@ -98,12 +107,15 @@ public class ButtonsGUI : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.skin = GUISkin;
+        GUI.skin = HeaderSkin;
 
         GUI.Box(_TopBarBox.rect, "");
         foreach (var button in _ButtonList)
         {
-            if (GUI.Button(button.mRect.rect, button.mText))
+            // Check if button active, last or normal and assign correct texture
+            Debug.Log(button.mText + " button isActive = " + button.mActive);
+            _TempButtonStyle.normal.background = (Texture2D)(button.mActive ? ButtonActiveTexture : button.mTexture);
+            if (GUI.Button(button.mRect.rect, button.mText, _TempButtonStyle))
             {
                 HandleButtonClick(button.mFunction);
             }
@@ -145,8 +157,8 @@ public class ButtonsGUI : MonoBehaviour
             Vector2 bounceEnd = new Vector2(buttonLeft, buttonTop - _BounceOffset);
             
             LTRect rect = new LTRect(new Rect(start.x, start.y, _ButtonWidth, _ButtonHeight));
-            
-            _ButtonList.Add(new CustomButton(kvp.Key, kvp.Value, rect, start, end, bounceEnd));
+            Texture texture = count == _NumButtons - 1 ? ButtonNoRightBorderTexture : ButtonRightBorderTexture;
+            _ButtonList.Add(new CustomButton(kvp.Key, kvp.Value, rect, start, end, bounceEnd, texture));
             count++;
         }
         
@@ -167,18 +179,23 @@ public class ButtonsGUI : MonoBehaviour
             switch (selectedFunction)
             {
                 case ButtonFunction.VegasModel:
+                    ActivateButton(ButtonFunction.VegasModel);
                     SetupVegasModel();
                     break;
                 case ButtonFunction.EmpireModel:
+                    ActivateButton(ButtonFunction.EmpireModel);
                     SetupEmpireStateModel();
                     break;
                 case ButtonFunction.EmpireImageSlider:
+                    ActivateButton(ButtonFunction.EmpireImageSlider);
                     ImageSliderGUI.Show();
                     break;
                 case ButtonFunction.EmpireInfo:
+                    ActivateButton(ButtonFunction.EmpireInfo);
                     InfoBoxGUI.Show();
                     break;
                 case ButtonFunction.Panoramic:
+                    ActivateButton(ButtonFunction.Panoramic);
                     PanoramicGUI.Show();
                     break;
                 default:
@@ -219,6 +236,14 @@ public class ButtonsGUI : MonoBehaviour
         {
             LeanTween.move(button.mRect, button.mBounceEnd, 0.05f).setEase(LeanTweenType.easeOutCubic)
                 .setOnComplete(() => LeanTween.move(button.mRect, button.mEnd, 0.07f).setEase(LeanTweenType.easeOutBounce));
+        }
+    }
+
+    void ActivateButton(ButtonFunction function)
+    {
+        foreach (var button in _ButtonList)
+        {
+            button.mActive = button.mFunction == function;
         }
     }
 
@@ -275,9 +300,11 @@ class CustomButton
     
     public Vector2 mBounceEnd { get; set; }
     
-    public bool mTweening = false;
+    public Texture mTexture { get; set; }
     
-    public CustomButton(ButtonsGUI.ButtonFunction function, string text, LTRect rect, Vector2 start, Vector2 end, Vector2 bounceEnd)
+    public bool mActive = false;
+    
+    public CustomButton(ButtonsGUI.ButtonFunction function, string text, LTRect rect, Vector2 start, Vector2 end, Vector2 bounceEnd, Texture texture)
     {
         mFunction = function;
         mText = text;
@@ -285,5 +312,6 @@ class CustomButton
         mStart = start;
         mEnd = end;
         mBounceEnd = bounceEnd;
+        mTexture = texture;
     }
 }

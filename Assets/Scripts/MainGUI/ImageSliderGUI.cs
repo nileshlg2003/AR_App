@@ -50,6 +50,7 @@ public class ImageSliderGUI : MonoBehaviour
     private Vector2 _NextButtonEnd;
     private Vector2 _NextButtonBounceEnd;
     
+    private RectOffset _BackgroundPadding;
     
     private int _SelectedImageIndex;
     
@@ -63,6 +64,9 @@ public class ImageSliderGUI : MonoBehaviour
         
         _W = Screen.width;
         _H = Screen.height;
+        
+        int padding = Convert.ToInt32(Math.Round(_H * 0.01f, MidpointRounding.AwayFromZero));
+        _BackgroundPadding = new RectOffset(padding, padding, padding, padding);
         
         // Percentage of screen (square buttons)
         _ButtonWidth = _W * BUTTON_WIDTH_SCALE;
@@ -94,7 +98,7 @@ public class ImageSliderGUI : MonoBehaviour
         
         if (ShowImageSlider)
         {
-            GUI.DrawTexture(_ImageSliderBox.rect, SliderBackground);
+            GUI.DrawTexture(_BackgroundPadding.Add(_ImageSliderBox.rect), SliderBackground);
             GUI.DrawTexture(_ImageSliderBox.rect, _Images [_SelectedImageIndex]);
             if (GUI.Button(_PrevButton.rect, PrevTexture))
             {
@@ -141,8 +145,8 @@ public class ImageSliderGUI : MonoBehaviour
         _ImageSliderBox = new LTRect(new Rect(_SliderStart.x, _SliderStart.y, _ImageSliderWidth, _ImageSliderHeight));
         
         float buttonTop = sliderTop + _ImageSliderHeight + _SliderButtonOffsetTop;
-        float prevButtonLeft = (_W / 2) - (_SliderButtonOffsetBetween + _ButtonWidth);
-        float nextButtonLeft = (_W / 2) + _SliderButtonOffsetBetween;
+        float prevButtonLeft = sliderLeft - _BackgroundPadding.left;
+        float nextButtonLeft = sliderLeft + _ImageSliderWidth + _BackgroundPadding.right - _ButtonWidth;
         
         _PrevButtonStart = new Vector2(-1 * _ButtonWidth, buttonTop);
         _PrevButtonEnd = new Vector2(prevButtonLeft, buttonTop);

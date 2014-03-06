@@ -7,6 +7,8 @@ public class InfoBoxGUI : MonoBehaviour
     public bool ShowInfoBox;
     public GUISkin GUISkin;
     public Texture OBLogo;
+    public Texture ButtonTexture;
+    public Texture ButtonActiveTexture;
 
     // Screen params
     private int _W;
