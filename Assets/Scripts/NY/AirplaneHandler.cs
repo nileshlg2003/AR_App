@@ -10,7 +10,7 @@ public class AirplaneHandler : MonoBehaviour {
 			iTween.MoveTo(this.gameObject, iTween.Hash(
 				"path", iTweenPath.GetPath("FlightPath"),
 				"orienttopath", true,
-				"time", 15,
+				"speed", 70,
 				"easetype", iTween.EaseType.linear,
       			"looptype", iTween.LoopType.loop));
 			playAnimation = false;
