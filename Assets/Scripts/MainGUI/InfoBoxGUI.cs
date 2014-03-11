@@ -74,9 +74,6 @@ public class InfoBoxGUI : MonoBehaviour
                             + "teams to deliver the quality of work you’d expect of yourselves.", _NormalTextStyle);
             GUILayout.Label("Through our focus on what we do we are able to create efficiencies that we are able to pass onto you. \nThe opportunity therefore exists for you to either increase your margins or pass on \nassociated savings to your customers, making you more competitive in the marketplace.\n", _NormalTextStyle);
             GUILayout.Label("A similar business culture, language and time zones play a major role in being able to successfully \ncommunicate between all stakeholders on a project. Grouping this with our rapid decision-making skills, \nrapid builds to demonstrate progress and strict \ndelivery methodology means we have jointly created a low-risk environment.\n\n", _NormalTextStyle);
-            GUILayout.Label("If you have an ethos that pivots around delivering work on time — not just any work, but work of the \nhighest standard — then we’ve got more in common than just business culture and language. \nWe welcome the opportunity to work with you and your management team to discover how we can \nsupport your revenue and cost objectives through this year and beyond.\n\n", _NormalTextStyle);
-            GUILayout.Label("Our ability to understand business problems, and our passion for creating solutions to them, has \nresulted in numerous clients coming to us from industries outside our real estate focus. \nAs a result we have created systems for the Insurance, Entertainment and \nCatering Services (financial and advisory) industries.\n", _NormalTextStyle);
-     
             if (GUILayout.Button("Contact Us", GUILayout.Width(200), GUILayout.Height(35))) {
                 Application.OpenURL("http://www.openboxsoftware.com/content/contactus.aspx");
             }
